@@ -8,7 +8,7 @@
        HERO SLIDER
   ======================================================== -->
 
-  <section class="hero-slider">
+  <section class="hero-slider" #heroSection>
 
     <!-- =====================================================
          SLIDES TRACK
@@ -16,7 +16,7 @@
 
     <div
       class="slides-track"
-      [style.transform]="'translateX(-' + (currentSlide * 50) + '%)'"
+      [style.transform]="trackTransform"
     >
 
       <!-- ===================================================
@@ -181,7 +181,7 @@
             </span>
 
             <span class="total-number">
-              02
+              {{ totalSlides | number: '2.0-0' }}
             </span>
 
           </div>
@@ -214,14 +214,21 @@
 
         <!-- Video -->
 
+        <!--
+          No `autoplay`: playback is driven from the component so the film
+          only runs while this slide is the one on screen. `preload` is
+          metadata rather than auto, so a visitor who never reaches slide 2
+          is not made to download ten megabytes of video.
+        -->
         <video
+          #heroVideo
           class="hero-video"
           src="/intro video.mp4"
-          autoplay
           muted
           loop
           playsinline
-          preload="auto"
+          preload="metadata"
+          aria-hidden="true"
         ></video>
 
 
@@ -336,7 +343,7 @@
             </span>
 
             <span class="total-number">
-              02
+              {{ totalSlides | number: '2.0-0' }}
             </span>
 
           </div>
@@ -352,6 +359,112 @@
             <i class="fa-solid fa-arrow-right"></i>
 
           </button>
+
+        </div>
+
+      </article>
+
+
+      <!-- ===================================================
+           SLIDE 03 — PRODUCTION CONTRIBUTION
+      ==================================================== -->
+
+      <article class="hero-slide hero-slide-credit">
+
+        <!-- Background photograph -->
+
+        <img
+          src="/rolls-royce-polo.png"
+          alt="A Rolls-Royce at a polo ground, shot in black and white"
+          class="credit-background"
+        />
+
+        <div class="credit-overlay"></div>
+
+        <div class="credit-gradient"></div>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <div class="hero-content">
+
+          <div class="credit-inner">
+
+            <div class="credit-label">
+
+              <span>(03)</span>
+
+              <span class="credit-line"></span>
+
+              <span>PRODUCTION CONTRIBUTION</span>
+
+            </div>
+
+            <h2 class="credit-title">ROLLS-ROYCE</h2>
+
+            <div class="credit-notes">
+
+              <p>Part of the work.</p>
+
+              <p class="credit-craft">Proud of the craft.</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SLIDE COUNTER
+        ================================================== -->
+
+        <div class="slider-controls">
+
+          <button
+            type="button"
+            class="arrow-button"
+            (click)="previousSlide()"
+            aria-label="Previous slide"
+          >
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          </button>
+
+          <div class="slide-counter">
+
+            <span class="current-number">
+              {{ currentSlide + 1 | number: '2.0-0' }}
+            </span>
+
+            <span class="slash">/</span>
+
+            <span class="total-number">
+              {{ totalSlides | number: '2.0-0' }}
+            </span>
+
+          </div>
+
+          <button
+            type="button"
+            class="arrow-button"
+            (click)="nextSlide()"
+            aria-label="Next slide"
+          >
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </button>
+
+        </div>
+
+
+        <!-- Side brand -->
+
+        <div class="side-brand">
+
+          <div class="side-orange-line"></div>
+
+          <span>EAST HOOD</span>
 
         </div>
 

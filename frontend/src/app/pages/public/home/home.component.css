@@ -57,8 +57,12 @@ html {
 ============================================================ */
 
 .slides-track {
+  /* One number drives the whole slider. The component derives its
+     translate from the same count. */
+  --slides: 3;
+
   display: flex;
-  width: 200%;
+  width: calc(var(--slides) * 100%);
   height: 100%;
   transition: transform 900ms cubic-bezier(0.77, 0, 0.175, 1);
   will-change: transform;
@@ -71,7 +75,7 @@ html {
 
 .hero-slide {
   position: relative;
-  width: 50%;
+  width: calc(100% / var(--slides));
   height: 100%;
   flex-shrink: 0;
   overflow: hidden;
@@ -1409,6 +1413,243 @@ html {
 
   .capability-item h3 {
     font-size: 10px;
+  }
+
+}
+
+/* ============================================================
+   SLIDE 03 — PRODUCTION CONTRIBUTION
+
+   A credit slide: the photograph carries the weight, the type
+   stays out of its way. The image is already black and white,
+   so the treatment is a gradient rather than a filter — a
+   scrim the type can sit on without dimming the whole frame.
+============================================================ */
+
+.hero-slide-credit {
+  background: #050505;
+}
+
+
+.credit-background {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  /* The car is on the right of the frame and the type sits left,
+     so bias the crop to keep the grille visible on narrow screens. */
+  object-position: 68% center;
+
+  z-index: 0;
+
+  transform-origin: center center;
+
+  will-change: transform;
+
+  backface-visibility: hidden;
+
+  animation: creditDrift 28s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+
+@keyframes creditDrift {
+
+  0% {
+    transform: scale(1.02) translateZ(0);
+  }
+
+  50% {
+    transform: scale(1.07) translateZ(0);
+  }
+
+  100% {
+    transform: scale(1.02) translateZ(0);
+  }
+
+}
+
+
+.credit-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  background: rgba(5, 5, 5, 0.3);
+}
+
+
+/* Left-weighted scrim: solid enough under the type, clearing
+   before the car so the photograph is never veiled. */
+
+.credit-gradient {
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  background: linear-gradient(
+    to right,
+    rgba(5, 5, 5, 0.92) 0%,
+    rgba(5, 5, 5, 0.75) 30%,
+    rgba(5, 5, 5, 0.25) 62%,
+    rgba(5, 5, 5, 0.05) 100%
+  );
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.credit-inner {
+  width: 100%;
+
+  /* Was 720px, sized for the two-line version. A single line needs room to
+     run, and `min()` keeps it inside the viewport on small screens. */
+  max-width: min(1100px, 92vw);
+
+  animation:
+    heroContentIn
+    1000ms
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.credit-label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  margin-bottom: 34px;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 10px;
+
+  letter-spacing: 0.3em;
+
+  color: rgba(242, 238, 232, 0.75);
+}
+
+
+.credit-line {
+  width: 60px;
+
+  height: 1px;
+
+  background: #e85b17;
+}
+
+
+/**
+ * "ROLLS-ROYCE" must never break.
+ *
+ * With `white-space: nowrap` the type cannot reflow, so the SIZE has to
+ * guarantee it fits. At this weight and tracking each uppercase glyph
+ * advances about 0.67em and the word is 11 characters, so the line is
+ * roughly 7.4em wide — multiply the vw figure by 7.4 to get the share of
+ * the viewport it occupies.
+ *
+ * 6.5vw -> ~48% of the viewport at every width above ~520px. The car fills
+ * the right of the frame from about the halfway point, so this keeps the
+ * type clear of the grille on any screen.
+ *
+ * ONE clamp, no breakpoint, deliberately: a media query here made the
+ * headline jump from 72px down to 58px as the window crossed 900px — type
+ * shrinking while the screen grows, which looks broken. A single curve
+ * cannot do that. Below ~520px the 34px floor takes over and the line runs
+ * to about 66% instead, which is fine once the crop shifts and the scrim
+ * turns vertical.
+ */
+.credit-title {
+  margin: 0;
+
+  white-space: nowrap;
+
+  font-size: clamp(34px, 6.5vw, 132px);
+
+  font-weight: 500;
+
+  line-height: 0.95;
+
+  letter-spacing: -0.045em;
+
+  color: #f2eee8;
+}
+
+
+/* ============================================================
+   NOTES
+
+   Two short lines. The second is the one that carries the
+   sentiment, so it gets the accent.
+============================================================ */
+
+.credit-notes {
+  margin-top: 44px;
+
+  padding-top: 28px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+
+  max-width: 34ch;
+}
+
+
+.credit-notes p {
+  margin: 0 0 8px;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: clamp(14px, 1.5vw, 18px);
+
+  line-height: 1.6;
+
+  letter-spacing: 0.02em;
+
+  color: rgba(242, 238, 232, 0.7);
+}
+
+
+.credit-craft {
+  color: #e85b17 !important;
+}
+
+
+/* ============================================================
+   NARROW SCREENS
+
+   The car sits far right in the frame; on a phone the crop
+   would lose it entirely, so pull the focal point across and
+   switch the scrim to vertical so the type still reads.
+============================================================ */
+
+@media (max-width: 900px) {
+
+  .credit-background {
+    object-position: 76% center;
+  }
+
+  .credit-gradient {
+    background: linear-gradient(
+      to bottom,
+      rgba(5, 5, 5, 0.55) 0%,
+      rgba(5, 5, 5, 0.8) 55%,
+      rgba(5, 5, 5, 0.94) 100%
+    );
+  }
+
+  .credit-notes {
+    margin-top: 32px;
+
+    padding-top: 22px;
   }
 
 }
