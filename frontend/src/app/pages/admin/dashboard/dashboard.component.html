@@ -1,0 +1,152 @@
+<!-- PAGE HEAD -->
+<header class="mb-7 flex flex-wrap items-end justify-between gap-4">
+
+  <div>
+    <p class="text-[9px] tracking-[0.28em] text-white/35">OVERVIEW</p>
+    <h1 class="mt-2 text-[26px] font-medium tracking-[-0.01em]">Dashboard</h1>
+    <p class="mt-1.5 text-[13px] text-white/45">
+      Welcome back, {{ user()?.name }}.
+    </p>
+  </div>
+
+  <button
+    type="button"
+    (click)="load()"
+    [disabled]="loading()"
+    class="flex items-center gap-2.5 rounded-lg border border-white/10 px-4 py-2.5 text-[11px]
+           text-white/60 transition-colors duration-200
+           hover:border-white/25 hover:text-white
+           disabled:cursor-not-allowed disabled:opacity-40"
+  >
+    <i class="fa-solid fa-rotate-right text-[11px]" [class.fa-spin]="loading()"></i>
+    Refresh
+  </button>
+
+</header>
+
+
+@if (error()) {
+  <div class="mb-6 flex items-start gap-3 rounded-lg border border-[#c4453a]/40 bg-[#c4453a]/10 px-4 py-3">
+    <i class="fa-solid fa-circle-exclamation mt-0.5 text-[12px] text-[#e0685f]"></i>
+    <p class="text-[12px] leading-relaxed text-[#e0685f]">{{ error() }}</p>
+  </div>
+}
+
+
+<!-- STAT TILES -->
+<div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+
+  @for (tile of tiles; track tile.label) {
+
+    <a
+      [routerLink]="tile.link"
+      class="group rounded-xl border border-white/10 bg-[#131316] p-5 transition-colors duration-200 hover:border-white/20"
+    >
+
+      <div class="flex items-start justify-between">
+        <i class="fa-solid text-[14px]" [class]="tile.icon + ' ' + tile.accent"></i>
+        <i class="fa-solid fa-arrow-right text-[10px] text-white/0 transition-all duration-200 group-hover:text-white/40"></i>
+      </div>
+
+      <p class="mt-5 text-[30px] font-medium leading-none tabular-nums">
+        {{ loading() ? '—' : tile.value }}
+      </p>
+
+      <p class="mt-2 text-[10px] tracking-[0.16em] text-white/40">
+        {{ tile.label | uppercase }}
+      </p>
+
+    </a>
+
+  }
+
+</div>
+
+
+<!-- LATEST ENQUIRIES -->
+<section class="mt-6 overflow-hidden rounded-xl border border-white/10 bg-[#131316]">
+
+  <header class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+
+    <h2 class="text-[14px] font-medium">Latest enquiries</h2>
+
+    <a
+      routerLink="/admin/contact-requests"
+      class="group flex items-center gap-2 text-[11px] text-white/45 transition-colors hover:text-white"
+    >
+      View all
+      <i class="fa-solid fa-arrow-right text-[9px] transition-transform duration-200 group-hover:translate-x-0.5"></i>
+    </a>
+
+  </header>
+
+  @if (loading()) {
+
+    <div class="divide-y divide-white/5">
+      @for (row of [1,2,3]; track row) {
+        <div class="flex items-center gap-4 px-5 py-4">
+          <div class="h-9 w-9 shrink-0 animate-pulse rounded-full bg-white/5"></div>
+          <div class="flex-1 space-y-2">
+            <div class="h-3 w-40 animate-pulse rounded bg-white/5"></div>
+            <div class="h-2.5 w-56 animate-pulse rounded bg-white/5"></div>
+          </div>
+        </div>
+      }
+    </div>
+
+  } @else if (!latest().length) {
+
+    <app-empty-state
+      icon="fa-inbox"
+      title="No enquiries yet"
+      message="When someone submits the contact form, it lands here."
+    />
+
+  } @else {
+
+    <div class="divide-y divide-white/5">
+
+      @for (request of latest(); track request.id) {
+
+        <a
+          routerLink="/admin/contact-requests"
+          class="flex items-center gap-4 px-5 py-4 transition-colors duration-200 hover:bg-white/[0.03]"
+        >
+
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-[11px] text-white/50">
+            {{ request.name.charAt(0) | uppercase }}
+          </span>
+
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-[13px]">{{ request.name }}</p>
+            <p class="truncate text-[11px] text-white/40">{{ request.email }}</p>
+          </div>
+
+          <span dir="ltr" class="hidden text-[11px] tabular-nums text-white/45 lg:block">
+            {{ request.phone }}
+          </span>
+
+          <span class="hidden text-[10px] tracking-[0.14em] text-white/40 md:block">
+            {{ request.projectType | uppercase }}
+          </span>
+
+          <span
+            class="shrink-0 whitespace-nowrap rounded-full border px-2.5 py-1 text-[9px] tracking-[0.14em]"
+            [class]="statusClass(request.status)"
+          >
+            {{ request.status | uppercase }}
+          </span>
+
+          <span class="hidden shrink-0 text-[11px] text-white/35 sm:block">
+            {{ request.createdAt | date: 'd MMM' }}
+          </span>
+
+        </a>
+
+      }
+
+    </div>
+
+  }
+
+</section>

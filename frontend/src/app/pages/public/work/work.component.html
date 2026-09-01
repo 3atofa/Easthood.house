@@ -1,0 +1,55 @@
+<section class="eh-page">
+
+  <div class="eh-container">
+
+    <p class="eh-eyebrow">(01) <span>SELECTED WORK</span></p>
+
+    <h1 class="eh-display">
+      WE MAKE<br />
+      BRANDS<br />
+      IMPOSSIBLE<br />
+      TO IGNORE.
+    </h1>
+
+  </div>
+
+
+  <!-- =====================================================
+       PROJECT INDEX
+  ====================================================== -->
+
+  <div class="eh-container work-list">
+
+    @for (project of projects(); track project.slug) {
+
+      <a class="work-row" [routerLink]="['/work', project.slug]">
+
+        <span class="work-index">{{ indexFor($index) }}</span>
+
+        <span class="work-title">{{ project.title }}</span>
+
+        <span class="work-category">{{ project.category }}</span>
+
+        <span class="work-year">{{ project.year }}</span>
+
+        <span class="work-arrow">
+          <i class="fa-solid fa-arrow-right"></i>
+        </span>
+
+      </a>
+
+    } @empty {
+
+      @if (loading()) {
+        <p class="eh-lead">Loading…</p>
+      } @else if (error()) {
+        <p class="eh-lead">{{ error() }}</p>
+      } @else {
+        <p class="eh-lead">Case studies are on their way.</p>
+      }
+
+    }
+
+  </div>
+
+</section>

@@ -1,0 +1,331 @@
+<!-- PAGE HEAD -->
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+
+  <div>
+    <p class="text-[9px] tracking-[0.28em] text-white/35">ACCESS</p>
+    <h1 class="mt-2 text-[26px] font-medium tracking-[-0.01em]">Users</h1>
+    <p class="mt-1.5 text-[13px] text-white/45">
+      {{ rows().length }} {{ rows().length === 1 ? 'account' : 'accounts' }}
+    </p>
+  </div>
+
+  <button
+    type="button"
+    (click)="openCreate()"
+    class="flex items-center gap-2.5 border border-[#f2eee8] bg-[#f2eee8] px-5 py-2.5
+           text-[10px] tracking-[0.2em] text-[#050505]
+           transition-all duration-300 hover:bg-transparent hover:text-[#f2eee8]"
+  >
+    <i class="fa-solid fa-user-plus text-[10px]"></i>
+    NEW USER
+  </button>
+
+</header>
+
+
+@if (error()) {
+  <div class="mb-5 flex items-start gap-3 rounded-lg border border-[#c4453a]/40 bg-[#c4453a]/10 px-4 py-3">
+    <i class="fa-solid fa-circle-exclamation mt-0.5 text-[12px] text-[#e0685f]"></i>
+    <p class="text-[12px] leading-relaxed text-[#e0685f]">{{ error() }}</p>
+  </div>
+}
+
+
+<section class="overflow-hidden rounded-xl border border-white/10 bg-[#131316]">
+
+  @if (loading()) {
+
+    <div class="divide-y divide-white/5">
+      @for (row of [1,2,3]; track row) {
+        <div class="flex items-center gap-4 px-5 py-4">
+          <div class="h-9 w-9 shrink-0 animate-pulse rounded-full bg-white/5"></div>
+          <div class="flex-1 space-y-2">
+            <div class="h-3 w-40 animate-pulse rounded bg-white/5"></div>
+            <div class="h-2.5 w-52 animate-pulse rounded bg-white/5"></div>
+          </div>
+        </div>
+      }
+    </div>
+
+  } @else if (!rows().length) {
+
+    <app-empty-state icon="fa-user-group" title="No users" message="Add someone to give them portal access." />
+
+  } @else {
+
+    <div class="overflow-x-auto">
+
+      <table class="w-full min-w-[680px] border-collapse text-left">
+
+        <thead>
+          <tr class="border-b border-white/10 text-[9px] tracking-[0.16em] text-white/35">
+            <th class="px-5 py-3 font-normal">USER</th>
+            <th class="px-5 py-3 font-normal">ROLE</th>
+            <th class="px-5 py-3 font-normal">STATUS</th>
+            <th class="px-5 py-3 font-normal">LAST SIGN IN</th>
+            <th class="px-5 py-3 font-normal text-right">ACTIONS</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-white/5">
+
+          @for (user of rows(); track user.id) {
+
+            <tr
+              (click)="openEdit(user)"
+              class="cursor-pointer transition-colors duration-200 hover:bg-white/[0.03]"
+            >
+
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-3">
+
+                  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e85b17]/15 text-[11px] font-medium text-[#e85b17]">
+                    {{ initials(user) }}
+                  </span>
+
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                      <p class="truncate text-[13px]">{{ user.name }}</p>
+                      @if (isSelf(user)) {
+                        <span class="shrink-0 rounded-full border border-white/15 px-2 py-0.5 text-[8px] tracking-[0.14em] text-white/40">
+                          YOU
+                        </span>
+                      }
+                    </div>
+                    <p class="truncate text-[11px] text-white/40">{{ user.email }}</p>
+                  </div>
+
+                </div>
+              </td>
+
+              <td class="px-5 py-4">
+                <span
+                  class="whitespace-nowrap rounded-full border px-2.5 py-1 text-[9px] tracking-[0.14em]"
+                  [class]="user.role === 'admin'
+                    ? 'border-[#e85b17]/40 text-[#e85b17]'
+                    : 'border-white/15 text-white/45'"
+                >
+                  {{ user.role | uppercase }}
+                </span>
+              </td>
+
+              <td class="px-5 py-4">
+                <span
+                  class="whitespace-nowrap rounded-full border px-2.5 py-1 text-[9px] tracking-[0.14em]"
+                  [class]="user.isActive
+                    ? 'border-[#78c8a0]/40 text-[#78c8a0]'
+                    : 'border-white/15 text-white/40'"
+                >
+                  {{ user.isActive ? 'ACTIVE' : 'DISABLED' }}
+                </span>
+              </td>
+
+              <td class="px-5 py-4 text-[11px] text-white/40">
+                {{ user.lastLoginAt ? (user.lastLoginAt | date: 'd MMM y') : 'Never' }}
+              </td>
+
+              <td class="px-5 py-4">
+                <div class="flex items-center justify-end gap-1">
+
+                  <button
+                    type="button"
+                    (click)="openEdit(user); $event.stopPropagation()"
+                    aria-label="Edit user"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                           transition-colors duration-200 hover:bg-white/5 hover:text-white"
+                  >
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="askDelete(user, $event)"
+                    [disabled]="isSelf(user)"
+                    [attr.aria-label]="isSelf(user) ? 'You cannot delete your own account' : 'Delete user'"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                           transition-colors duration-200
+                           hover:bg-[#c4453a]/15 hover:text-[#e0685f]
+                           disabled:cursor-not-allowed disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-white/40"
+                  >
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+
+                </div>
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  }
+
+</section>
+
+
+<!-- =====================================================
+     CREATE / EDIT MODAL
+====================================================== -->
+
+@if (formOpen()) {
+
+  <app-modal
+    [title]="editing() ? 'Edit user' : 'New user'"
+    [subtitle]="editing() ? editing()!.email : 'They will sign in at /admin/login.'"
+    icon="fa-user-gear"
+    size="md"
+    [busy]="saving()"
+    (closed)="formOpen.set(false)"
+  >
+
+    <form modal-body [formGroup]="form" class="flex flex-col gap-5">
+
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">FULL NAME</span>
+        <input
+          type="text"
+          formControlName="name"
+          class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                 transition-colors duration-200 focus:border-white/30"
+        />
+        @if (invalid('name')) {
+          <span class="text-[11px] text-[#e0685f]">{{ message('name') }}</span>
+        }
+      </label>
+
+
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">EMAIL ADDRESS</span>
+        <input
+          type="email"
+          formControlName="email"
+          autocomplete="off"
+          class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                 transition-colors duration-200 focus:border-white/30"
+        />
+        @if (invalid('email')) {
+          <span class="text-[11px] text-[#e0685f]">{{ message('email') }}</span>
+        }
+      </label>
+
+
+      <label class="flex flex-col gap-2">
+
+        <span class="text-[9px] tracking-[0.2em] text-white/35">
+          {{ editing() ? 'NEW PASSWORD (OPTIONAL)' : 'PASSWORD' }}
+        </span>
+
+        <div class="relative">
+          <input
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="new-password"
+            [placeholder]="editing() ? 'Leave blank to keep the current one' : ''"
+            class="w-full rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 pr-11 text-[13px]
+                   outline-none transition-colors duration-200
+                   placeholder:text-white/25 focus:border-white/30"
+          />
+          <button
+            type="button"
+            (click)="showPassword.set(!showPassword())"
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] text-white/35
+                   transition-colors duration-200 hover:text-white"
+          >
+            <i class="fa-regular" [class]="showPassword() ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
+
+        @if (invalid('password')) {
+          <span class="text-[11px] text-[#e0685f]">{{ message('password') }}</span>
+        } @else {
+          <span class="text-[11px] text-white/30">
+            At least 8 characters, with an uppercase letter and a number.
+          </span>
+        }
+
+      </label>
+
+
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">ROLE</span>
+        <select
+          formControlName="role"
+          class="cursor-pointer rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px]
+                 outline-none transition-colors duration-200 focus:border-white/30"
+        >
+          @for (role of roles; track role) {
+            <option [value]="role" class="bg-[#131316]">{{ role }}</option>
+          }
+        </select>
+        <span class="text-[11px] text-white/30">
+          Editors manage content. Admins also manage users.
+        </span>
+      </label>
+
+
+      <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-black/20 px-4 py-3.5">
+        <input type="checkbox" formControlName="isActive" class="peer sr-only" />
+        <span class="relative h-5 w-9 shrink-0 rounded-full bg-white/15 transition-colors duration-200 peer-checked:bg-[#78c8a0]">
+          <span class="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-200 peer-checked:translate-x-4"></span>
+        </span>
+        <span class="text-[13px]">Account is active</span>
+      </label>
+
+    </form>
+
+
+    <div modal-footer class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+
+      <button
+        type="button"
+        (click)="formOpen.set(false)"
+        [disabled]="saving()"
+        class="border border-white/15 px-5 py-2.5 text-[10px] tracking-[0.2em] text-white/70
+               transition-colors duration-200 hover:border-white/35 hover:text-white
+               disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        CANCEL
+      </button>
+
+      <button
+        type="button"
+        (click)="save()"
+        [disabled]="saving()"
+        class="flex items-center justify-center gap-2.5 border border-[#f2eee8] bg-[#f2eee8]
+               px-5 py-2.5 text-[10px] tracking-[0.2em] text-[#050505]
+               transition-all duration-300 hover:bg-transparent hover:text-[#f2eee8]
+               disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        @if (saving()) {
+          <i class="fa-solid fa-circle-notch fa-spin text-[11px]"></i>
+        }
+        {{ editing() ? 'SAVE CHANGES' : 'CREATE USER' }}
+      </button>
+
+    </div>
+
+  </app-modal>
+
+}
+
+
+@if (deleting(); as user) {
+
+  <app-confirm-dialog
+    title="Delete this user?"
+    [message]="user.name + ' will lose access to the admin portal immediately.'"
+    detail="This cannot be undone. Deactivate the account instead if you may need it later."
+    confirmLabel="Delete"
+    tone="danger"
+    [busy]="deleteBusy()"
+    (confirmed)="confirmDelete()"
+    (cancelled)="deleting.set(null)"
+  />
+
+}

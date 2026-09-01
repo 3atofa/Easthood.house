@@ -1,0 +1,415 @@
+<!-- PAGE HEAD -->
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+
+  <div>
+    <p class="text-[9px] tracking-[0.28em] text-white/35">INBOX</p>
+    <h1 class="mt-2 text-[26px] font-medium tracking-[-0.01em]">Enquiries</h1>
+    <p class="mt-1.5 text-[13px] text-white/45">
+      {{ total() }} {{ total() === 1 ? 'enquiry' : 'enquiries' }}
+    </p>
+  </div>
+
+  <div class="relative w-full sm:w-72">
+    <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[11px] text-white/30"></i>
+    <input
+      type="search"
+      placeholder="Search name, email, phone or message"
+      [ngModel]="search()"
+      (ngModelChange)="onSearch($event)"
+      class="w-full rounded-lg border border-white/10 bg-[#131316] py-2.5 pl-9 pr-3 text-[12px]
+             outline-none transition-colors duration-200
+             placeholder:text-white/25
+             focus:border-white/30"
+    />
+  </div>
+
+</header>
+
+
+<!-- FILTERS -->
+<div class="mb-5 flex flex-wrap gap-2">
+
+  @for (option of statuses; track option) {
+    <button
+      type="button"
+      (click)="setStatus(option)"
+      class="rounded-full border px-3.5 py-1.5 text-[9px] tracking-[0.16em] transition-colors duration-200"
+      [class]="status() === option
+        ? 'border-[#f2eee8] bg-[#f2eee8] text-[#050505]'
+        : 'border-white/10 text-white/45 hover:border-white/25 hover:text-white'"
+    >
+      {{ option | uppercase }}
+    </button>
+  }
+
+</div>
+
+
+@if (error()) {
+  <div class="mb-5 flex items-start gap-3 rounded-lg border border-[#c4453a]/40 bg-[#c4453a]/10 px-4 py-3">
+    <i class="fa-solid fa-circle-exclamation mt-0.5 text-[12px] text-[#e0685f]"></i>
+    <p class="text-[12px] leading-relaxed text-[#e0685f]">{{ error() }}</p>
+  </div>
+}
+
+
+<!-- TABLE -->
+<section class="overflow-hidden rounded-xl border border-white/10 bg-[#131316]">
+
+  @if (loading()) {
+
+    <div class="divide-y divide-white/5">
+      @for (row of [1,2,3,4,5]; track row) {
+        <div class="flex items-center gap-4 px-5 py-4">
+          <div class="h-9 w-9 shrink-0 animate-pulse rounded-full bg-white/5"></div>
+          <div class="flex-1 space-y-2">
+            <div class="h-3 w-40 animate-pulse rounded bg-white/5"></div>
+            <div class="h-2.5 w-56 animate-pulse rounded bg-white/5"></div>
+          </div>
+        </div>
+      }
+    </div>
+
+  } @else if (!rows().length) {
+
+    <app-empty-state
+      icon="fa-inbox"
+      title="Nothing here"
+      message="No enquiries match this filter."
+    />
+
+  } @else {
+
+    <!-- The table scrolls sideways rather than the page. -->
+    <div class="overflow-x-auto">
+
+      <table class="w-full min-w-[880px] border-collapse text-left">
+
+        <thead>
+          <tr class="border-b border-white/10 text-[9px] tracking-[0.16em] text-white/35">
+            <th class="px-5 py-3 font-normal">FROM</th>
+            <th class="px-5 py-3 font-normal">PHONE</th>
+            <th class="px-5 py-3 font-normal">TYPE</th>
+            <th class="px-5 py-3 font-normal">STATUS</th>
+            <th class="px-5 py-3 font-normal">RECEIVED</th>
+            <th class="px-5 py-3 font-normal text-right">ACTIONS</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-white/5">
+
+          @for (request of rows(); track request.id) {
+
+            <tr
+              (click)="open(request)"
+              class="cursor-pointer transition-colors duration-200 hover:bg-white/[0.03]"
+            >
+
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-3">
+                  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/5 text-[11px] text-white/50">
+                    {{ request.name.charAt(0) | uppercase }}
+                  </span>
+                  <div class="min-w-0">
+                    <p class="truncate text-[13px]">{{ request.name }}</p>
+                    <p class="truncate text-[11px] text-white/40">{{ request.email }}</p>
+                  </div>
+                </div>
+              </td>
+
+              <td class="px-5 py-4">
+                <!-- dir=ltr so an RTL layout cannot reorder the digits. -->
+                <a
+                  [href]="'tel:' + request.phone.replace(rxNonDial, '')"
+                  (click)="$event.stopPropagation()"
+                  dir="ltr"
+                  class="inline-block text-[12px] tabular-nums text-white/60 transition-colors hover:text-[#e85b17]"
+                >{{ request.phone }}</a>
+              </td>
+
+              <td class="px-5 py-4 text-[10px] tracking-[0.14em] text-white/45">
+                {{ request.projectType | uppercase }}
+              </td>
+
+              <td class="px-5 py-4">
+                <span
+                  class="whitespace-nowrap rounded-full border px-2.5 py-1 text-[9px] tracking-[0.14em]"
+                  [class]="statusClass(request.status)"
+                >
+                  {{ request.status | uppercase }}
+                </span>
+              </td>
+
+              <td class="px-5 py-4 text-[11px] text-white/40">
+                {{ request.createdAt | date: 'd MMM y' }}
+              </td>
+
+              <td class="px-5 py-4">
+                <div class="flex items-center justify-end gap-1">
+
+                  <button
+                    type="button"
+                    (click)="open(request); $event.stopPropagation()"
+                    aria-label="Open enquiry"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                           transition-colors duration-200 hover:bg-white/5 hover:text-white"
+                  >
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+
+                  <a
+                    [href]="'mailto:' + request.email"
+                    (click)="$event.stopPropagation()"
+                    aria-label="Reply by email"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                           transition-colors duration-200 hover:bg-white/5 hover:text-white"
+                  >
+                    <i class="fa-solid fa-reply"></i>
+                  </a>
+
+                  <button
+                    type="button"
+                    (click)="askDelete(request, $event)"
+                    aria-label="Delete enquiry"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                           transition-colors duration-200 hover:bg-[#c4453a]/15 hover:text-[#e0685f]"
+                  >
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+
+                </div>
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- PAGINATION -->
+    @if (totalPages > 1) {
+
+      <div class="flex items-center justify-between border-t border-white/10 px-5 py-3.5">
+
+        <p class="text-[11px] text-white/40">
+          Page {{ page() }} of {{ totalPages }}
+        </p>
+
+        <div class="flex gap-2">
+
+          <button
+            type="button"
+            (click)="goToPage(page() - 1)"
+            [disabled]="page() === 1"
+            class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-[11px]
+                   text-white/60 transition-colors duration-200
+                   hover:border-white/25 hover:text-white
+                   disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <button
+            type="button"
+            (click)="goToPage(page() + 1)"
+            [disabled]="page() === totalPages"
+            class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-[11px]
+                   text-white/60 transition-colors duration-200
+                   hover:border-white/25 hover:text-white
+                   disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  }
+
+</section>
+
+
+<!-- =====================================================
+     VIEW / EDIT MODAL
+====================================================== -->
+
+@if (selected(); as request) {
+
+  <app-modal
+    [title]="request.name"
+    [subtitle]="request.email"
+    icon="fa-envelope-open-text"
+    size="lg"
+    [busy]="saving()"
+    (closed)="close()"
+  >
+
+    <div modal-body class="flex flex-col gap-6">
+
+      <!-- Meta -->
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+
+        <div>
+          <p class="text-[9px] tracking-[0.2em] text-white/35">PHONE</p>
+          <a
+            [href]="'tel:' + request.phone.replace(rxNonDial, '')"
+            dir="ltr"
+            class="mt-1.5 block text-[13px] tabular-nums text-[#e85b17] transition-opacity hover:opacity-70"
+          >{{ request.phone }}</a>
+        </div>
+
+        <div>
+          <p class="text-[9px] tracking-[0.2em] text-white/35">PROJECT TYPE</p>
+          <p class="mt-1.5 text-[13px]">{{ request.projectType | uppercase }}</p>
+        </div>
+
+        <div>
+          <p class="text-[9px] tracking-[0.2em] text-white/35">RECEIVED</p>
+          <p class="mt-1.5 text-[13px]">{{ request.createdAt | date: 'd MMM y, HH:mm' }}</p>
+        </div>
+
+        @if (request.repliedAt) {
+          <div>
+            <p class="text-[9px] tracking-[0.2em] text-white/35">REPLIED</p>
+            <p class="mt-1.5 text-[13px]">{{ request.repliedAt | date: 'd MMM y' }}</p>
+          </div>
+        }
+
+      </div>
+
+
+      <!-- Message -->
+      <div>
+        <p class="mb-2 text-[9px] tracking-[0.2em] text-white/35">MESSAGE</p>
+        <div class="whitespace-pre-wrap rounded-lg border border-white/10 bg-black/20 px-4 py-3.5 text-[13px] leading-relaxed text-white/75">{{ request.message }}</div>
+      </div>
+
+
+      <!-- Status -->
+      <div>
+        <p class="mb-2.5 text-[9px] tracking-[0.2em] text-white/35">STATUS</p>
+
+        <div class="flex flex-wrap gap-2">
+          @for (option of editableStatuses; track option) {
+            <button
+              type="button"
+              (click)="draftStatus.set(option)"
+              class="rounded-full border px-3.5 py-1.5 text-[9px] tracking-[0.16em] transition-colors duration-200"
+              [class]="draftStatus() === option
+                ? 'border-[#f2eee8] bg-[#f2eee8] text-[#050505]'
+                : 'border-white/10 text-white/45 hover:border-white/25 hover:text-white'"
+            >
+              {{ option | uppercase }}
+            </button>
+          }
+        </div>
+      </div>
+
+
+      <!-- Internal note -->
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">INTERNAL NOTE</span>
+        <textarea
+          rows="4"
+          [ngModel]="draftNote()"
+          (ngModelChange)="draftNote.set($event)"
+          placeholder="Only the studio sees this."
+          class="resize-y rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-[13px] leading-relaxed
+                 outline-none transition-colors duration-200
+                 placeholder:text-white/25
+                 focus:border-white/30"
+        ></textarea>
+      </label>
+
+    </div>
+
+
+    <div modal-footer class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+      <div class="flex gap-3">
+        <a
+          [href]="'mailto:' + request.email"
+          class="flex items-center justify-center gap-2.5 rounded-lg border border-white/10 px-4 py-2.5
+                 text-[11px] text-white/60 transition-colors duration-200
+                 hover:border-white/25 hover:text-white"
+        >
+          <i class="fa-solid fa-reply text-[10px]"></i>
+          Email
+        </a>
+
+        <a
+          [href]="'tel:' + request.phone.replace(rxNonDial, '')"
+          class="flex items-center justify-center gap-2.5 rounded-lg border border-white/10 px-4 py-2.5
+                 text-[11px] text-white/60 transition-colors duration-200
+                 hover:border-white/25 hover:text-white"
+        >
+          <i class="fa-solid fa-phone text-[10px]"></i>
+          Call
+        </a>
+      </div>
+
+      <div class="flex flex-col-reverse gap-3 sm:flex-row">
+
+        <button
+          type="button"
+          (click)="close()"
+          [disabled]="saving()"
+          class="border border-white/15 px-5 py-2.5 text-[10px] tracking-[0.2em] text-white/70
+                 transition-colors duration-200
+                 hover:border-white/35 hover:text-white
+                 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          CANCEL
+        </button>
+
+        <button
+          type="button"
+          (click)="save()"
+          [disabled]="saving()"
+          class="flex items-center justify-center gap-2.5 border border-[#f2eee8] bg-[#f2eee8]
+                 px-5 py-2.5 text-[10px] tracking-[0.2em] text-[#050505]
+                 transition-all duration-300
+                 hover:bg-transparent hover:text-[#f2eee8]
+                 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          @if (saving()) {
+            <i class="fa-solid fa-circle-notch fa-spin text-[11px]"></i>
+          }
+          SAVE CHANGES
+        </button>
+
+      </div>
+
+    </div>
+
+  </app-modal>
+
+}
+
+
+<!-- =====================================================
+     DELETE CONFIRM
+====================================================== -->
+
+@if (deleting(); as request) {
+
+  <app-confirm-dialog
+    title="Delete this enquiry?"
+    [message]="'The enquiry from ' + request.name + ' will be removed permanently.'"
+    detail="This cannot be undone. Consider archiving it instead."
+    confirmLabel="Delete"
+    tone="danger"
+    [busy]="deleteBusy()"
+    (confirmed)="confirmDelete()"
+    (cancelled)="deleting.set(null)"
+  />
+
+}

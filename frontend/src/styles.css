@@ -1,0 +1,174 @@
+/* ============================================================
+   EAST HOOD — GLOBAL STYLES
+============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* ============================================================
+   TOKENS
+============================================================ */
+
+:root {
+  --eh-black: #050505;
+  --eh-ink: #f2eee8;
+  --eh-muted: rgba(242, 238, 232, 0.55);
+  --eh-faint: rgba(242, 238, 232, 0.3);
+  --eh-line: rgba(255, 255, 255, 0.1);
+
+  --eh-font: Arial, Helvetica, sans-serif;
+
+  --eh-gutter: 6vw;
+  --eh-gutter-lg: 3.5vw;
+
+  color-scheme: dark;
+}
+
+
+/* ============================================================
+   BASE
+============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+
+  background: var(--eh-black);
+
+  color: var(--eh-ink);
+
+  font-family: var(--eh-font);
+
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   INNER PAGE PRIMITIVES
+
+   Shared by every public page that is not the home hero, so the
+   editorial rhythm stays identical across the site.
+============================================================ */
+
+.eh-page {
+  /* Clears the fixed navbar. */
+  padding-top: 140px;
+
+  padding-bottom: 120px;
+}
+
+.eh-container {
+  width: 100%;
+
+  max-width: 1440px;
+
+  margin: 0 auto;
+
+  padding-left: var(--eh-gutter);
+
+  padding-right: var(--eh-gutter);
+}
+
+@media (min-width: 1024px) {
+
+  .eh-container {
+    padding-left: var(--eh-gutter-lg);
+
+    padding-right: var(--eh-gutter-lg);
+  }
+}
+
+.eh-eyebrow {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  font-size: 10px;
+
+  letter-spacing: 0.24em;
+
+  color: var(--eh-faint);
+
+  margin-bottom: 28px;
+}
+
+.eh-display {
+  font-size: clamp(42px, 9vw, 128px);
+
+  font-weight: 500;
+
+  line-height: 0.94;
+
+  letter-spacing: -0.03em;
+
+  margin: 0;
+}
+
+.eh-heading {
+  font-size: clamp(26px, 4vw, 52px);
+
+  font-weight: 500;
+
+  line-height: 1.06;
+
+  letter-spacing: -0.02em;
+
+  margin: 0;
+}
+
+.eh-lead {
+  font-size: clamp(14px, 1.5vw, 19px);
+
+  line-height: 1.65;
+
+  color: var(--eh-muted);
+
+  max-width: 62ch;
+}
+
+.eh-rule {
+  height: 1px;
+
+  border: 0;
+
+  background: var(--eh-line);
+
+  margin: 0;
+}
+
+.eh-link {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  color: var(--eh-ink);
+
+  text-decoration: none;
+
+  font-size: 11px;
+
+  letter-spacing: 0.2em;
+
+  transition: gap 300ms ease, opacity 300ms ease;
+}
+
+.eh-link:hover {
+  gap: 20px;
+
+  opacity: 0.7;
+}

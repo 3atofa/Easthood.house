@@ -1,0 +1,142 @@
+<section class="eh-page">
+
+  <div class="eh-container">
+
+    <p class="eh-eyebrow">(05) <span>INSIGHTS</span></p>
+
+    <!-- Exactly one h1 per page, and it is this page's own subject. -->
+    <h1 class="eh-display">
+      WHAT WE<br />
+      THINK<br />
+      OUT LOUD.
+    </h1>
+
+    <p class="eh-lead articles-lead">
+      Writing from the studio on brand strategy, identity systems, creative
+      direction and production.
+    </p>
+
+  </div>
+
+
+  <div class="eh-container article-list">
+
+    @if (loading()) {
+
+      <p class="eh-lead">Loading…</p>
+
+    } @else if (error()) {
+
+      <p class="eh-lead">{{ error() }}</p>
+
+    } @else {
+
+      @for (article of rows(); track article.slug) {
+
+        <article class="article-card">
+
+          <a class="article-media" [routerLink]="['/articles', article.slug]">
+            @if (article.coverImage) {
+              <img
+                [src]="article.coverImage"
+                [alt]="article.coverAlt || article.title"
+                loading="lazy"
+                decoding="async"
+              />
+            }
+          </a>
+
+          <div class="article-body">
+
+            <div class="article-meta">
+              <span>{{ article.category | uppercase }}</span>
+              <span>·</span>
+              <time [attr.datetime]="article.publishedAt">
+                {{ article.publishedAt | date: 'd MMM y' }}
+              </time>
+              <span>·</span>
+              <span>{{ article.readingMinutes }} MIN READ</span>
+            </div>
+
+            <h2 class="article-title">
+              <a [routerLink]="['/articles', article.slug]">
+                {{ article.title }}
+              </a>
+            </h2>
+
+            <p class="article-excerpt">{{ article.excerpt }}</p>
+
+            <a class="eh-link" [routerLink]="['/articles', article.slug]">
+              READ
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+          </div>
+
+        </article>
+
+      } @empty {
+
+        <p class="eh-lead">Nothing published yet.</p>
+
+      }
+
+    }
+
+  </div>
+
+
+  <!-- =====================================================
+       PAGINATION
+
+       Real <a href> links, not buttons — a crawler follows
+       these, so articles past page 1 stay reachable.
+  ====================================================== -->
+
+  @if (totalPages() > 1) {
+
+    <nav class="eh-container pagination" aria-label="Article pages">
+
+      @if (page() > 1) {
+        <a
+          class="page-step"
+          routerLink="/articles"
+          [queryParams]="pageParams(page() - 1)"
+          rel="prev"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+          PREVIOUS
+        </a>
+      }
+
+      <div class="page-numbers">
+        @for (number of pageWindow; track number) {
+          <a
+            class="page-number"
+            [class.is-current]="number === page()"
+            routerLink="/articles"
+            [queryParams]="pageParams(number)"
+            [attr.aria-current]="number === page() ? 'page' : null"
+          >
+            {{ number }}
+          </a>
+        }
+      </div>
+
+      @if (page() < totalPages()) {
+        <a
+          class="page-step"
+          routerLink="/articles"
+          [queryParams]="pageParams(page() + 1)"
+          rel="next"
+        >
+          NEXT
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      }
+
+    </nav>
+
+  }
+
+</section>

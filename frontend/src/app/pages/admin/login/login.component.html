@@ -1,0 +1,239 @@
+<!-- =====================================================
+     ADMIN SIGN IN
+     Two columns: the form on the left, EAST HOOD on the
+     right. The content column is hidden below lg so the
+     form owns the whole screen on a phone.
+====================================================== -->
+
+<div class="grid min-h-screen grid-cols-1 bg-[#050505] text-[#f2eee8] lg:grid-cols-2">
+
+  <!-- ===================================================
+       COLUMN 1 — FORM
+  ==================================================== -->
+
+  <div class="flex min-h-screen flex-col justify-between px-6 py-10 sm:px-12 lg:px-[6vw]">
+
+    <!-- Brand -->
+    <a routerLink="/" class="group inline-flex items-center gap-3 self-start">
+      <i class="fa-solid fa-arrow-left text-[10px] opacity-0 transition-opacity duration-300 group-hover:opacity-60"></i>
+      <span class="text-[13px] font-medium tracking-[0.18em]">EAST HOOD</span>
+    </a>
+
+
+    <!-- Form -->
+    <div class="mx-auto w-full max-w-[380px] py-12">
+
+      <p class="mb-4 text-[9px] tracking-[0.28em] text-white/35">
+        ADMIN PORTAL
+      </p>
+
+      <h1 class="text-[34px] font-medium leading-[1.05] tracking-[-0.02em]">
+        Sign in
+      </h1>
+
+      <p class="mt-3 text-[13px] leading-relaxed text-white/45">
+        Restricted area. Authorised users only.
+      </p>
+
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+        class="mt-10 flex flex-col gap-6"
+      >
+
+        <!-- EMAIL -->
+        <label class="flex flex-col gap-2">
+
+          <span class="text-[9px] tracking-[0.24em] text-white/40">
+            EMAIL ADDRESS
+          </span>
+
+          <div class="relative">
+
+            <i class="fa-regular fa-envelope pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-[12px] text-white/30"></i>
+
+            <input
+              type="email"
+              formControlName="email"
+              autocomplete="username"
+              placeholder="you@easthood.house"
+              class="w-full border-0 border-b border-white/15 bg-transparent py-2.5 pl-6 text-sm
+                     outline-none transition-colors duration-200
+                     placeholder:text-white/20
+                     focus:border-[#e85b17]"
+            />
+
+          </div>
+
+          @if (fieldError('email'); as message) {
+            <span class="text-[11px] text-[#e0685f]">{{ message }}</span>
+          }
+
+        </label>
+
+
+        <!-- PASSWORD -->
+        <label class="flex flex-col gap-2">
+
+          <span class="text-[9px] tracking-[0.24em] text-white/40">
+            PASSWORD
+          </span>
+
+          <div class="relative">
+
+            <i class="fa-solid fa-lock pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-[12px] text-white/30"></i>
+
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="w-full border-0 border-b border-white/15 bg-transparent py-2.5 pl-6 pr-9 text-sm
+                     outline-none transition-colors duration-200
+                     placeholder:text-white/20
+                     focus:border-[#e85b17]"
+            />
+
+            <button
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+              class="absolute right-0 top-1/2 -translate-y-1/2 p-1 text-[12px] text-white/35
+                     transition-colors duration-200 hover:text-white"
+            >
+              <i class="fa-regular" [class]="showPassword() ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+
+          </div>
+
+          @if (fieldError('password'); as message) {
+            <span class="text-[11px] text-[#e0685f]">{{ message }}</span>
+          }
+
+          <a
+            routerLink="/admin/forgot-password"
+            class="self-end text-[11px] text-white/40 transition-colors duration-200 hover:text-[#e85b17]"
+          >
+            Forgot your password?
+          </a>
+
+        </label>
+
+
+        <!-- FORM-LEVEL ERROR -->
+        @if (error()) {
+          <div
+            role="alert"
+            class="flex items-start gap-3 border border-[#c4453a]/40 bg-[#c4453a]/10 px-4 py-3"
+          >
+            <i class="fa-solid fa-circle-exclamation mt-0.5 text-[12px] text-[#e0685f]"></i>
+            <span class="text-[12px] leading-relaxed text-[#e0685f]">{{ error() }}</span>
+          </div>
+        }
+
+
+        <!-- SUBMIT -->
+        <button
+          type="submit"
+          [disabled]="loading()"
+          class="group mt-2 flex items-center justify-center gap-3 border border-[#f2eee8] bg-[#f2eee8]
+                 px-6 py-3.5 text-[10px] tracking-[0.22em] text-[#050505]
+                 transition-all duration-300
+                 hover:bg-transparent hover:text-[#f2eee8]
+                 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+
+          @if (loading()) {
+            <i class="fa-solid fa-circle-notch fa-spin text-[11px]"></i>
+            <span>SIGNING IN</span>
+          } @else {
+            <span>SIGN IN</span>
+            <i class="fa-solid fa-arrow-right text-[10px] transition-transform duration-300 group-hover:translate-x-1"></i>
+          }
+
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- Footer -->
+    <p class="text-[9px] tracking-[0.18em] text-white/25">
+      © {{ year }} EAST HOOD
+    </p>
+
+  </div>
+
+
+  <!-- ===================================================
+       COLUMN 2 — CONTENT
+  ==================================================== -->
+
+  <aside
+    class="relative hidden flex-col justify-between overflow-hidden
+           border-l border-white/10 bg-[#0b0b0c]
+           px-[5vw] py-14
+           lg:flex"
+  >
+
+    <!-- Ambient wash so the panel is not a flat rectangle -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full
+             bg-[#e85b17]/10 blur-[120px]"
+    ></div>
+
+    <div class="relative">
+
+      <p class="text-[9px] tracking-[0.28em] text-white/35">
+        (01) — THE STUDIO
+      </p>
+
+      <h2 class="mt-8 text-[clamp(34px,3.4vw,58px)] font-medium leading-[0.98] tracking-[-0.03em]">
+        YOUR BRAND<br />
+        DESERVES<br />
+        A POINT OF VIEW.
+      </h2>
+
+      <p class="mt-8 max-w-[46ch] text-[14px] leading-relaxed text-white/45">
+        EAST HOOD is a branding, strategy and production house built for brands
+        that refuse to disappear into the noise. This is where the studio keeps
+        the work that visitors see.
+      </p>
+
+    </div>
+
+
+    <!-- What lives in here -->
+    <div class="relative mt-12 flex flex-col gap-6 border-t border-white/10 pt-10">
+
+      @for (item of highlights; track item.title) {
+
+        <div class="flex items-start gap-4">
+
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-[12px] text-white/60">
+            <i class="fa-solid" [class]="item.icon"></i>
+          </span>
+
+          <div>
+            <p class="text-[13px] font-medium">{{ item.title }}</p>
+            <p class="mt-1 text-[12px] leading-relaxed text-white/40">{{ item.copy }}</p>
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+
+    <p class="relative mt-12 text-[9px] tracking-[0.2em] text-white/25">
+      {{ site.email | uppercase }}
+    </p>
+
+  </aside>
+
+</div>

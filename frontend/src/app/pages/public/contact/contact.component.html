@@ -1,0 +1,382 @@
+<!-- =======================================================
+     CONTACT / START A PROJECT
+======================================================== -->
+
+<section
+  id="contact"
+  class="contact-section
+         relative min-h-screen w-full overflow-hidden
+         bg-[#eee7df] text-[#111111]
+         bg-[url('/droped%20phone.png')]"
+>
+
+  <!-- =====================================================
+       MAIN CONTACT WRAPPER
+  ====================================================== -->
+
+  <div
+    class="relative flex w-full flex-col lg:min-h-screen lg:flex-row"
+  >
+
+    <!-- ===================================================
+         LEFT — CONTACT FORM
+    ==================================================== -->
+
+    <div
+      class="relative z-20 flex w-full flex-col
+             px-6 py-16
+             sm:px-10 sm:py-20
+             md:px-16
+             lg:w-[55%]
+             lg:justify-center
+             lg:px-[8.5vw]
+             lg:py-20"
+    >
+
+      <!-- SECTION NUMBER -->
+
+      <div
+        class="mb-10 flex items-center gap-4
+               text-[9px]
+               tracking-[0.3em]
+               text-black/70
+               sm:mb-12
+               sm:text-[10px]"
+      >
+
+        <span>
+          (04)
+        </span>
+
+        <span
+          class="h-px w-10 bg-[#e85b17]
+                 sm:w-16"
+        ></span>
+
+        <span>
+          START A PROJECT
+        </span>
+
+      </div>
+
+
+      <!-- =================================================
+           TITLE
+      ================================================== -->
+
+      <h1
+        class="font-serif font-normal
+               text-[clamp(3rem,6vw,6.5rem)]
+               leading-[0.88]
+               tracking-[-0.055em]"
+      >
+
+        START A
+
+        <br />
+
+        <span>
+          PROJECT.
+        </span>
+
+      </h1>
+
+
+      <!-- =================================================
+           FORM
+      ================================================== -->
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+        class="mt-10 w-full max-w-[640px] sm:mt-12"
+      >
+
+        <!-- The form sits over a full-bleed photograph, so it gets its own
+             translucent ground. Without it the fields fight the image for
+             contrast and the whole thing reads as unfinished. -->
+        <div
+          class="rounded-xl border border-black/[0.07] bg-white/55 p-6 shadow-[0_1px_40px_rgba(0,0,0,0.04)]
+                 backdrop-blur-[2px]
+                 sm:p-8"
+        >
+
+          <!-- =================================================
+               01 — NAME
+          ================================================== -->
+
+          <div class="mb-6">
+
+            <label for="name" class="mb-2.5 flex items-baseline gap-2.5">
+              <span class="text-[10px] tabular-nums tracking-[0.2em] text-[#e85b17]">01</span>
+              <span class="text-[11px] font-medium tracking-[0.16em] text-black/70">YOUR NAME</span>
+            </label>
+
+            <input
+              id="name"
+              formControlName="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Nour Hassan"
+              class="w-full rounded-lg border bg-white px-4 py-3.5 text-[15px] text-[#111]
+                     outline-none transition-all duration-200
+                     placeholder:text-black/25
+                     focus:border-[#e85b17] focus:ring-2 focus:ring-[#e85b17]/15"
+              [class]="invalid('name') ? 'border-[#c4453a]' : 'border-black/12'"
+            />
+
+            @if (invalid('name')) {
+              <p class="mt-2 flex items-center gap-2 text-[12px] text-[#c4453a]">
+                <i class="fa-solid fa-circle-exclamation text-[10px]"></i>{{ message('name') }}
+              </p>
+            }
+
+          </div>
+
+
+          <!-- =================================================
+               02 / 03 — EMAIL + PHONE
+          ================================================== -->
+
+          <div class="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+
+            <div>
+              <label for="email" class="mb-2.5 flex items-baseline gap-2.5">
+                <span class="text-[10px] tabular-nums tracking-[0.2em] text-[#e85b17]">02</span>
+                <span class="text-[11px] font-medium tracking-[0.16em] text-black/70">EMAIL</span>
+              </label>
+
+              <input
+                id="email"
+                formControlName="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="you@company.com"
+                class="w-full rounded-lg border bg-white px-4 py-3.5 text-[15px] text-[#111]
+                       outline-none transition-all duration-200
+                       placeholder:text-black/25
+                       focus:border-[#e85b17] focus:ring-2 focus:ring-[#e85b17]/15"
+                [class]="invalid('email') ? 'border-[#c4453a]' : 'border-black/12'"
+              />
+
+              @if (invalid('email')) {
+                <p class="mt-2 flex items-center gap-2 text-[12px] text-[#c4453a]">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i>{{ message('email') }}
+                </p>
+              }
+            </div>
+
+            <div>
+              <label for="phone" class="mb-2.5 flex items-baseline gap-2.5">
+                <span class="text-[10px] tabular-nums tracking-[0.2em] text-[#e85b17]">03</span>
+                <span class="text-[11px] font-medium tracking-[0.16em] text-black/70">PHONE</span>
+              </label>
+
+              <!-- dir="ltr": digits read left-to-right in every script, and
+                   an RTL layout would otherwise reorder the number. -->
+              <input
+                id="phone"
+                formControlName="phone"
+                type="tel"
+                dir="ltr"
+                inputmode="tel"
+                autocomplete="tel"
+                placeholder="+20 100 123 4567"
+                class="w-full rounded-lg border bg-white px-4 py-3.5 text-[15px] tabular-nums text-[#111]
+                       outline-none transition-all duration-200
+                       placeholder:text-black/25
+                       focus:border-[#e85b17] focus:ring-2 focus:ring-[#e85b17]/15"
+                [class]="invalid('phone') ? 'border-[#c4453a]' : 'border-black/12'"
+              />
+
+              @if (invalid('phone')) {
+                <p class="mt-2 flex items-center gap-2 text-[12px] text-[#c4453a]">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i>{{ message('phone') }}
+                </p>
+              }
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               04 — PROJECT TYPE
+
+               Chips, not a <select>. Every option is visible at
+               a glance and each is a proper tap target; a native
+               select on a phone is a modal roulette wheel.
+          ================================================== -->
+
+          <div class="mb-6">
+
+            <span class="mb-3 flex items-baseline gap-2.5">
+              <span class="text-[10px] tabular-nums tracking-[0.2em] text-[#e85b17]">04</span>
+              <span class="text-[11px] font-medium tracking-[0.16em] text-black/70">PROJECT TYPE</span>
+            </span>
+
+            <div class="flex flex-wrap gap-2">
+              @for (option of projectTypes; track option.value) {
+                <button
+                  type="button"
+                  (click)="chooseType(option.value)"
+                  [attr.aria-pressed]="form.controls.projectType.value === option.value"
+                  class="rounded-lg border px-4 py-2.5 text-[13px] transition-all duration-200"
+                  [class]="form.controls.projectType.value === option.value
+                    ? 'border-[#e85b17] bg-[#e85b17] text-white shadow-[0_2px_12px_rgba(232,91,23,0.25)]'
+                    : 'border-black/12 bg-white text-black/70 hover:border-black/35 hover:bg-white'"
+                >
+                  {{ option.label }}
+                </button>
+              }
+            </div>
+
+            @if (invalid('projectType')) {
+              <p class="mt-2.5 flex items-center gap-2 text-[12px] text-[#c4453a]">
+                <i class="fa-solid fa-circle-exclamation text-[10px]"></i>Choose the kind of project.
+              </p>
+            }
+
+          </div>
+
+
+          <!-- =================================================
+               05 — MESSAGE
+          ================================================== -->
+
+          <div>
+
+            <label for="message" class="mb-2.5 flex items-baseline gap-2.5">
+              <span class="text-[10px] tabular-nums tracking-[0.2em] text-[#e85b17]">05</span>
+              <span class="text-[11px] font-medium tracking-[0.16em] text-black/70">TELL US ABOUT THE PROJECT</span>
+              <span class="ml-auto text-[11px] tabular-nums text-black/30">{{ messageLength }}/5000</span>
+            </label>
+
+            <textarea
+              id="message"
+              formControlName="message"
+              rows="5"
+              placeholder="What are you building, who is it for, and when does it need to land?"
+              class="w-full resize-y rounded-lg border bg-white px-4 py-3.5 text-[15px] leading-relaxed text-[#111]
+                     outline-none transition-all duration-200
+                     placeholder:text-black/25
+                     focus:border-[#e85b17] focus:ring-2 focus:ring-[#e85b17]/15"
+              [class]="invalid('message') ? 'border-[#c4453a]' : 'border-black/12'"
+            ></textarea>
+
+            @if (invalid('message')) {
+              <p class="mt-2 flex items-center gap-2 text-[12px] text-[#c4453a]">
+                <i class="fa-solid fa-circle-exclamation text-[10px]"></i>{{ message('message') }}
+              </p>
+            }
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SUBMIT
+        ================================================== -->
+
+        <div class="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+
+          <button
+            type="submit"
+            [disabled]="loading()"
+            class="group inline-flex items-center justify-center gap-3.5 rounded-lg
+                   bg-[#111] px-8 py-4 text-[12px] font-medium tracking-[0.18em] text-[#eee7df]
+                   transition-colors duration-300
+                   hover:bg-[#e85b17]
+                   disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            @if (loading()) {
+              <i class="fa-solid fa-circle-notch fa-spin text-[12px]"></i>SENDING
+            } @else {
+              SEND ENQUIRY
+              <i class="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
+            }
+          </button>
+
+          <p class="text-[12px] leading-relaxed text-black/45">
+            We reply to every enquiry,<br class="hidden sm:block" />
+            usually within one working day.
+          </p>
+
+        </div>
+
+
+        <!-- =================================================
+             RESULT
+        ================================================== -->
+
+        @if (sent()) {
+          <div role="status" class="mt-6 flex items-start gap-3.5 rounded-lg border border-[#2f7d55]/30 bg-[#2f7d55]/10 px-5 py-4">
+            <i class="fa-solid fa-circle-check mt-0.5 text-[14px] text-[#2f7d55]"></i>
+            <div>
+              <p class="text-[14px] font-medium text-[#1f5c3d]">Your brand called. We'll answer.</p>
+              <p class="mt-1 text-[13px] leading-relaxed text-[#1f5c3d]/75">
+                We've emailed you a copy. Someone from the studio will be in touch shortly.
+              </p>
+            </div>
+          </div>
+        }
+
+        @if (error()) {
+          <div role="alert" class="mt-6 flex items-start gap-3.5 rounded-lg border border-[#c4453a]/35 bg-[#c4453a]/10 px-5 py-4">
+            <i class="fa-solid fa-circle-exclamation mt-0.5 text-[14px] text-[#c4453a]"></i>
+            <div>
+              <p class="text-[14px] font-medium text-[#c4453a]">{{ error() }}</p>
+              <p class="mt-1 text-[13px] leading-relaxed text-[#c4453a]/75">
+                You can also email us at
+                <a href="mailto:hello@easthood.house" class="underline underline-offset-2">hello&#64;easthood.house</a>.
+              </p>
+            </div>
+          </div>
+        }
+
+      </form>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       BOTTOM MESSAGE
+  ====================================================== -->
+
+  <div
+    class="contact-tagline
+           absolute bottom-6 right-6 z-30
+           hidden max-w-[180px]
+           text-right
+           lg:block"
+  >
+
+    <p
+      class="font-serif
+             text-2xl
+             leading-[0.9]
+             tracking-[-0.03em]"
+    >
+
+      YOUR BRAND
+
+      <br />
+
+      IS CALLING.
+
+      <br />
+
+      <span class="text-[#e85b17]">
+        WE'LL ANSWER.
+      </span>
+
+    </p>
+
+  </div>
+
+</section>

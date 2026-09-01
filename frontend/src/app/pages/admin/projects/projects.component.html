@@ -1,0 +1,417 @@
+<!-- PAGE HEAD -->
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+
+  <div>
+    <p class="text-[9px] tracking-[0.28em] text-white/35">CONTENT</p>
+    <h1 class="mt-2 text-[26px] font-medium tracking-[-0.01em]">Work</h1>
+    <p class="mt-1.5 text-[13px] text-white/45">
+      {{ rows().length }} case {{ rows().length === 1 ? 'study' : 'studies' }}
+    </p>
+  </div>
+
+  <button
+    type="button"
+    (click)="openCreate()"
+    class="flex items-center gap-2.5 border border-[#f2eee8] bg-[#f2eee8] px-5 py-2.5
+           text-[10px] tracking-[0.2em] text-[#050505]
+           transition-all duration-300 hover:bg-transparent hover:text-[#f2eee8]"
+  >
+    <i class="fa-solid fa-plus text-[10px]"></i>
+    NEW PROJECT
+  </button>
+
+</header>
+
+
+@if (error()) {
+  <div class="mb-5 flex items-start gap-3 rounded-lg border border-[#c4453a]/40 bg-[#c4453a]/10 px-4 py-3">
+    <i class="fa-solid fa-circle-exclamation mt-0.5 text-[12px] text-[#e0685f]"></i>
+    <p class="text-[12px] leading-relaxed text-[#e0685f]">{{ error() }}</p>
+  </div>
+}
+
+
+<section class="overflow-hidden rounded-xl border border-white/10 bg-[#131316]">
+
+  @if (loading()) {
+
+    <div class="divide-y divide-white/5">
+      @for (row of [1,2,3]; track row) {
+        <div class="flex items-center gap-4 px-5 py-4">
+          <div class="h-12 w-16 shrink-0 animate-pulse rounded bg-white/5"></div>
+          <div class="flex-1 space-y-2">
+            <div class="h-3 w-48 animate-pulse rounded bg-white/5"></div>
+            <div class="h-2.5 w-32 animate-pulse rounded bg-white/5"></div>
+          </div>
+        </div>
+      }
+    </div>
+
+  } @else if (!rows().length) {
+
+    <app-empty-state
+      icon="fa-layer-group"
+      title="No case studies yet"
+      message="Add the first project and it will appear on the public Work page."
+    />
+
+  } @else {
+
+    <div class="overflow-x-auto">
+
+      <table class="w-full min-w-[720px] border-collapse text-left">
+
+        <thead>
+          <tr class="border-b border-white/10 text-[9px] tracking-[0.16em] text-white/35">
+            <th class="px-5 py-3 font-normal">PROJECT</th>
+            <th class="px-5 py-3 font-normal">CATEGORY</th>
+            <th class="px-5 py-3 font-normal">YEAR</th>
+            <th class="px-5 py-3 font-normal">STATUS</th>
+            <th class="px-5 py-3 font-normal text-right">ACTIONS</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-white/5">
+
+          @for (project of rows(); track project.id) {
+
+            <tr
+              (click)="openEdit(project)"
+              class="cursor-pointer transition-colors duration-200 hover:bg-white/[0.03]"
+            >
+
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-3">
+
+                  <span class="flex h-12 w-16 shrink-0 items-center justify-center overflow-hidden rounded border border-white/10 bg-black/30">
+                    @if (project.cover) {
+                      <img [src]="project.cover" [alt]="project.title" class="h-full w-full object-cover" />
+                    } @else {
+                      <i class="fa-regular fa-image text-[12px] text-white/20"></i>
+                    }
+                  </span>
+
+                  <div class="min-w-0">
+                    <p class="truncate text-[13px]">{{ project.title }}</p>
+                    <p class="truncate text-[11px] text-white/40">/{{ project.slug }}</p>
+                  </div>
+
+                </div>
+              </td>
+
+              <td class="px-5 py-4 text-[10px] tracking-[0.14em] text-white/45">
+                {{ project.category }}
+              </td>
+
+              <td class="px-5 py-4 text-[11px] text-white/40">
+                {{ project.year }}
+              </td>
+
+              <td class="px-5 py-4">
+                <button
+                  type="button"
+                  (click)="togglePublished(project, $event)"
+                  class="whitespace-nowrap rounded-full border px-2.5 py-1 text-[9px] tracking-[0.14em] transition-colors duration-200"
+                  [class]="project.isPublished
+                    ? 'border-[#78c8a0]/40 text-[#78c8a0] hover:bg-[#78c8a0]/10'
+                    : 'border-white/15 text-white/45 hover:bg-white/5'"
+                >
+                  {{ project.isPublished ? 'PUBLISHED' : 'DRAFT' }}
+                </button>
+              </td>
+
+              <td class="px-5 py-4">
+                <div class="flex items-center justify-end gap-1">
+
+                  <button
+                    type="button"
+                    (click)="openEdit(project); $event.stopPropagation()"
+                    aria-label="Edit project"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                           transition-colors duration-200 hover:bg-white/5 hover:text-white"
+                  >
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="askDelete(project, $event)"
+                    aria-label="Delete project"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                           transition-colors duration-200 hover:bg-[#c4453a]/15 hover:text-[#e0685f]"
+                  >
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+
+                </div>
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  }
+
+</section>
+
+
+<!-- =====================================================
+     CREATE / EDIT MODAL
+====================================================== -->
+
+@if (formOpen()) {
+
+  <app-modal
+    [title]="editing() ? 'Edit project' : 'New project'"
+    [subtitle]="editing() ? editing()!.slug : 'It stays a draft until you publish it.'"
+    icon="fa-layer-group"
+    size="lg"
+    [busy]="saving()"
+    (closed)="closeForm()"
+  >
+
+    <form modal-body [formGroup]="form" class="flex flex-col gap-5">
+
+      <!-- TITLE -->
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">TITLE</span>
+        <input
+          type="text"
+          formControlName="title"
+          class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                 transition-colors duration-200 placeholder:text-white/25 focus:border-white/30"
+        />
+        @if (fieldInvalid('title')) {
+          <span class="text-[11px] text-[#e0685f]">{{ fieldMessage('title') }}</span>
+        }
+      </label>
+
+
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+        <label class="flex flex-col gap-2">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">CLIENT</span>
+          <input
+            type="text"
+            formControlName="client"
+            class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                   transition-colors duration-200 focus:border-white/30"
+          />
+        </label>
+
+        <label class="flex flex-col gap-2">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">CATEGORY</span>
+          <input
+            type="text"
+            formControlName="category"
+            placeholder="BRAND IDENTITY"
+            class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                   transition-colors duration-200 placeholder:text-white/25 focus:border-white/30"
+          />
+          @if (fieldInvalid('category')) {
+            <span class="text-[11px] text-[#e0685f]">{{ fieldMessage('category') }}</span>
+          }
+        </label>
+
+        <label class="flex flex-col gap-2">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">YEAR</span>
+          <input
+            type="text"
+            formControlName="year"
+            placeholder="2026"
+            class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                   transition-colors duration-200 placeholder:text-white/25 focus:border-white/30"
+          />
+          @if (fieldInvalid('year')) {
+            <span class="text-[11px] text-[#e0685f]">{{ fieldMessage('year') }}</span>
+          }
+        </label>
+
+        <label class="flex flex-col gap-2">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">SORT ORDER</span>
+          <input
+            type="number"
+            formControlName="sortOrder"
+            class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                   transition-colors duration-200 focus:border-white/30"
+          />
+        </label>
+
+      </div>
+
+
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">COVER IMAGE PATH</span>
+        <input
+          type="text"
+          formControlName="cover"
+          placeholder="/oldphonebg.png"
+          class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                 transition-colors duration-200 placeholder:text-white/25 focus:border-white/30"
+        />
+        <span class="text-[11px] text-white/30">
+          A path under the site's public folder, starting with /
+        </span>
+      </label>
+
+
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">EXCERPT</span>
+        <textarea
+          rows="3"
+          formControlName="excerpt"
+          class="resize-y rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-[13px] leading-relaxed
+                 outline-none transition-colors duration-200 focus:border-white/30"
+        ></textarea>
+        @if (fieldInvalid('excerpt')) {
+          <span class="text-[11px] text-[#e0685f]">{{ fieldMessage('excerpt') }}</span>
+        }
+      </label>
+
+
+      <!-- SERVICES REPEATER -->
+      <div class="flex flex-col gap-2.5" formArrayName="services">
+
+        <div class="flex items-center justify-between">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">SERVICES CREDITED</span>
+          <button
+            type="button"
+            (click)="addService()"
+            class="flex items-center gap-2 text-[11px] text-white/45 transition-colors hover:text-white"
+          >
+            <i class="fa-solid fa-plus text-[9px]"></i> Add
+          </button>
+        </div>
+
+        @for (control of servicesArray.controls; track $index) {
+          <div class="flex gap-2">
+            <input
+              type="text"
+              [formControlName]="$index"
+              placeholder="Brand Strategy"
+              class="flex-1 rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                     transition-colors duration-200 placeholder:text-white/25 focus:border-white/30"
+            />
+            <button
+              type="button"
+              (click)="removeAt(servicesArray, $index)"
+              aria-label="Remove"
+              class="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-lg border border-white/10
+                     text-[12px] text-white/40 transition-colors duration-200
+                     hover:border-[#c4453a]/40 hover:text-[#e0685f]"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        } @empty {
+          <p class="text-[11px] text-white/30">No services credited yet.</p>
+        }
+
+      </div>
+
+
+      <!-- BODY REPEATER -->
+      <div class="flex flex-col gap-2.5" formArrayName="body">
+
+        <div class="flex items-center justify-between">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">BODY PARAGRAPHS</span>
+          <button
+            type="button"
+            (click)="addParagraph()"
+            class="flex items-center gap-2 text-[11px] text-white/45 transition-colors hover:text-white"
+          >
+            <i class="fa-solid fa-plus text-[9px]"></i> Add
+          </button>
+        </div>
+
+        @for (control of bodyArray.controls; track $index) {
+          <div class="flex gap-2">
+            <textarea
+              rows="3"
+              [formControlName]="$index"
+              class="flex-1 resize-y rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-[13px]
+                     leading-relaxed outline-none transition-colors duration-200 focus:border-white/30"
+            ></textarea>
+            <button
+              type="button"
+              (click)="removeAt(bodyArray, $index)"
+              aria-label="Remove paragraph"
+              class="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-lg border border-white/10
+                     text-[12px] text-white/40 transition-colors duration-200
+                     hover:border-[#c4453a]/40 hover:text-[#e0685f]"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        }
+
+      </div>
+
+
+      <!-- PUBLISHED -->
+      <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-black/20 px-4 py-3.5">
+        <input type="checkbox" formControlName="isPublished" class="peer sr-only" />
+        <span class="relative h-5 w-9 shrink-0 rounded-full bg-white/15 transition-colors duration-200 peer-checked:bg-[#78c8a0]">
+          <span class="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-200 peer-checked:translate-x-4"></span>
+        </span>
+        <span class="text-[13px]">Published on the public site</span>
+      </label>
+
+    </form>
+
+
+    <div modal-footer class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+
+      <button
+        type="button"
+        (click)="closeForm()"
+        [disabled]="saving()"
+        class="border border-white/15 px-5 py-2.5 text-[10px] tracking-[0.2em] text-white/70
+               transition-colors duration-200 hover:border-white/35 hover:text-white
+               disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        CANCEL
+      </button>
+
+      <button
+        type="button"
+        (click)="save()"
+        [disabled]="saving()"
+        class="flex items-center justify-center gap-2.5 border border-[#f2eee8] bg-[#f2eee8]
+               px-5 py-2.5 text-[10px] tracking-[0.2em] text-[#050505]
+               transition-all duration-300 hover:bg-transparent hover:text-[#f2eee8]
+               disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        @if (saving()) {
+          <i class="fa-solid fa-circle-notch fa-spin text-[11px]"></i>
+        }
+        {{ editing() ? 'SAVE CHANGES' : 'CREATE PROJECT' }}
+      </button>
+
+    </div>
+
+  </app-modal>
+
+}
+
+
+@if (deleting(); as project) {
+
+  <app-confirm-dialog
+    title="Delete this project?"
+    [message]="project.title + ' will be removed from the site permanently.'"
+    detail="This cannot be undone. Unpublish it instead if you only want it hidden."
+    confirmLabel="Delete"
+    tone="danger"
+    [busy]="deleteBusy()"
+    (confirmed)="confirmDelete()"
+    (cancelled)="deleting.set(null)"
+  />
+
+}

@@ -1,0 +1,187 @@
+<section class="eh-page">
+
+  <div class="eh-container">
+
+    <p class="eh-eyebrow">(02) <span>CAPABILITIES</span></p>
+
+    <h1 class="eh-display">
+      STRATEGY<br />
+      IDENTITY<br />
+      PRODUCTION.
+    </h1>
+
+    <p class="eh-lead services-lead">
+      Strategy, identity, creative direction and production — built for brands
+      with ambition, delivered by one team under one roof.
+    </p>
+
+  </div>
+
+
+  <!-- =====================================================
+       CAPABILITY LIST
+  ====================================================== -->
+
+  <div class="eh-container capability-list">
+
+    @for (capability of capabilities(); track capability.id) {
+
+      <article class="capability">
+
+        <span class="capability-index">{{ indexFor($index, capability) }}</span>
+
+        <div class="capability-main">
+
+          <h2>{{ capability.title | uppercase }}</h2>
+
+          <p>{{ capability.summary }}</p>
+
+          <div class="capability-price">
+            <span class="price-amount">{{ capability.price | number: '1.0-0' }}</span>
+            <span class="price-currency">{{ capability.currency }}</span>
+          </div>
+
+        </div>
+
+        <ul class="capability-deliverables">
+          @for (item of capability.deliverables; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+
+      </article>
+
+    } @empty {
+
+      @if (loading()) {
+        <p class="eh-lead" style="padding: 44px 0;">Loading…</p>
+      } @else if (error()) {
+        <p class="eh-lead" style="padding: 44px 0;">{{ error() }}</p>
+      }
+
+    }
+
+  </div>
+
+
+  <!-- =====================================================
+       PACKAGES
+
+       Bundles of whole services, priced below their sum. The
+       saving is calculated server-side from the same figures
+       shown above, so the two can never disagree.
+  ====================================================== -->
+
+  @if (packages().length) {
+
+    <div class="eh-container packages-section">
+
+      <p class="eh-eyebrow">(03) <span>PACKAGES</span></p>
+
+      <h2 class="eh-heading">
+        TAKE MORE,<br />
+        PAY LESS.
+      </h2>
+
+      <p class="eh-lead packages-lead">
+        Combinations of the capabilities above, briefed as one job and priced
+        below the sum of their parts.
+      </p>
+
+      <div class="package-grid">
+
+        @for (pack of packages(); track pack.id) {
+
+          <article class="package-card" [class.is-popular]="pack.isPopular">
+
+            @if (pack.isPopular) {
+              <span class="package-flag">MOST CHOSEN</span>
+            }
+
+            <h3 class="package-name">{{ pack.name }}</h3>
+
+            @if (pack.description) {
+              <p class="package-desc">{{ pack.description }}</p>
+            }
+
+            <!-- PRICE -->
+            <div class="package-pricing">
+
+              <div class="package-price-row">
+                <span class="package-price">{{ pack.price | number: '1.0-0' }}</span>
+                <span class="package-currency">{{ pack.currency }}</span>
+              </div>
+
+              @if (pack.savings > 0) {
+                <p class="package-saving">
+                  <span class="package-was">{{ pack.servicesTotal | number: '1.0-0' }}</span>
+                  save {{ pack.savings | number: '1.0-0' }} ({{ pack.savingsPercent }}%)
+                </p>
+              }
+
+              @if (pack.billingPeriod !== 'one-off') {
+                <p class="package-billing">{{ pack.billingPeriod | uppercase }}</p>
+              }
+
+            </div>
+
+            <!-- WHAT IS IN IT -->
+            <div class="package-includes">
+
+              <p class="package-includes-label">INCLUDES</p>
+
+              <ul class="package-services">
+                @for (service of pack.services; track service.id) {
+                  <li>
+                    @if (service.icon) {
+                      <i class="fa-solid" [class]="service.icon"></i>
+                    }
+                    {{ service.title }}
+                  </li>
+                }
+              </ul>
+
+              @if (pack.features.length) {
+                <ul class="package-features">
+                  @for (feature of pack.features; track feature) {
+                    <li>
+                      <i class="fa-solid fa-plus"></i>
+                      {{ feature }}
+                    </li>
+                  }
+                </ul>
+              }
+
+            </div>
+
+            <a routerLink="/contact" class="package-cta">
+              ENQUIRE
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+          </article>
+
+        }
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <div class="eh-container services-cta">
+
+    <h2 class="eh-heading">
+      YOUR BRAND CALLED.<br />
+      LET'S TALK.
+    </h2>
+
+    <a routerLink="/contact" class="eh-link">
+      START A PROJECT
+      <i class="fa-solid fa-arrow-right"></i>
+    </a>
+
+  </div>
+
+</section>

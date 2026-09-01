@@ -1,0 +1,194 @@
+<!-- =====================================================
+     ADMIN PORTAL SHELL
+====================================================== -->
+
+<div class="min-h-screen bg-[#0b0b0c] text-[#f2eee8] antialiased">
+
+  <!-- ===================================================
+       SIDEBAR
+       Off-canvas below lg, permanent from lg up.
+  ==================================================== -->
+
+  <aside
+    class="fixed inset-y-0 left-0 z-50 flex w-[248px] flex-col border-r border-white/10 bg-[#131316]
+           transition-transform duration-300 ease-out
+           lg:translate-x-0"
+    [class.-translate-x-full]="!sidebarOpen()"
+    [class.translate-x-0]="sidebarOpen()"
+  >
+
+    <!-- Brand -->
+    <a routerLink="/" class="flex shrink-0 flex-col gap-1 px-5 py-6">
+      <span class="text-[14px] font-medium tracking-[0.16em]">EAST HOOD</span>
+      <span class="text-[9px] tracking-[0.28em] text-white/35">ADMIN</span>
+    </a>
+
+
+    <!-- Navigation -->
+    <nav class="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-3 py-2">
+
+      @for (link of links; track link.path) {
+
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="!bg-white/[0.07] !text-[#f2eee8]"
+          class="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] text-white/50
+                 transition-colors duration-200
+                 hover:bg-white/[0.04] hover:text-[#f2eee8]"
+        >
+          <span
+            routerLinkActive="opacity-100"
+            class="absolute left-0 h-5 w-[2px] rounded-r bg-[#e85b17] opacity-0 transition-opacity duration-200"
+          ></span>
+
+          <i class="fa-solid w-4 text-center text-[12px]" [class]="link.icon"></i>
+          {{ link.label }}
+        </a>
+
+      }
+
+    </nav>
+
+
+    <!-- Signed-in user -->
+    <div class="shrink-0 border-t border-white/10 p-3">
+
+      <div class="flex items-center gap-3 rounded-lg px-2 py-2">
+
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e85b17]/15 text-[11px] font-medium text-[#e85b17]">
+          {{ initials }}
+        </span>
+
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-[12px]">{{ user()?.name }}</p>
+          <p class="text-[9px] tracking-[0.18em] text-white/35">
+            {{ user()?.role | uppercase }}
+          </p>
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        (click)="logout()"
+        class="mt-2 flex w-full items-center gap-3 rounded-lg border border-white/10 px-3 py-2.5
+               text-[12px] text-white/50 transition-colors duration-200
+               hover:border-white/25 hover:text-[#f2eee8]"
+      >
+        <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center text-[11px]"></i>
+        Sign out
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- Scrim, mobile only -->
+  @if (sidebarOpen()) {
+    <div
+      class="fixed inset-0 z-40 bg-black/60 lg:hidden"
+      (click)="toggleSidebar()"
+      aria-hidden="true"
+    ></div>
+  }
+
+
+  <!-- ===================================================
+       CONTENT
+  ==================================================== -->
+
+  <div class="flex min-h-screen flex-col lg:pl-[248px]">
+
+    <!-- TOP BAR -->
+    <header
+      class="sticky top-0 z-30 flex shrink-0 items-center gap-4 border-b border-white/10
+             bg-[#0b0b0c]/85 px-5 py-3.5 backdrop-blur-md sm:px-8"
+    >
+
+      <button
+        type="button"
+        (click)="toggleSidebar()"
+        aria-label="Toggle navigation"
+        class="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10
+               text-[13px] text-white/70 transition-colors duration-200
+               hover:border-white/25 hover:text-white
+               lg:hidden"
+      >
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+
+      <a
+        routerLink="/"
+        target="_blank"
+        class="ml-auto hidden items-center gap-2 text-[11px] text-white/45
+               transition-colors duration-200 hover:text-white sm:flex"
+      >
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        View site
+      </a>
+
+
+      <!-- Account menu -->
+      <div class="relative ml-auto sm:ml-0">
+
+        <button
+          type="button"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="menuOpen()"
+          class="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors duration-200 hover:bg-white/5"
+        >
+          <span class="flex h-8 w-8 items-center justify-center rounded-full bg-[#e85b17]/15 text-[10px] font-medium text-[#e85b17]">
+            {{ initials }}
+          </span>
+          <i class="fa-solid fa-chevron-down text-[9px] text-white/40"></i>
+        </button>
+
+        @if (menuOpen()) {
+
+          <!-- click-away catcher -->
+          <div class="fixed inset-0 z-10" (click)="toggleMenu()" aria-hidden="true"></div>
+
+          <div class="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-lg border border-white/10 bg-[#131316] shadow-xl">
+
+            <div class="border-b border-white/10 px-4 py-3">
+              <p class="truncate text-[12px]">{{ user()?.name }}</p>
+              <p class="truncate text-[11px] text-white/40">{{ user()?.email }}</p>
+            </div>
+
+            <a
+              routerLink="/"
+              target="_blank"
+              class="flex items-center gap-3 px-4 py-2.5 text-[12px] text-white/60 transition-colors hover:bg-white/5 hover:text-white sm:hidden"
+            >
+              <i class="fa-solid fa-arrow-up-right-from-square w-4 text-center text-[10px]"></i>
+              View site
+            </a>
+
+            <button
+              type="button"
+              (click)="logout()"
+              class="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[12px] text-white/60 transition-colors hover:bg-white/5 hover:text-white"
+            >
+              <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center text-[10px]"></i>
+              Sign out
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    </header>
+
+
+    <!-- ROUTED PAGE -->
+    <main class="flex-1 px-5 py-6 sm:px-8 sm:py-8">
+      <router-outlet />
+    </main>
+
+  </div>
+
+</div>

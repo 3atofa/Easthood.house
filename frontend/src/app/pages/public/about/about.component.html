@@ -1,0 +1,100 @@
+<section class="eh-page">
+
+  <div class="eh-container">
+
+    <!-- =====================================================
+         INTRO
+    ====================================================== -->
+
+    <p class="eh-eyebrow">(03) <span>ABOUT EAST HOOD</span></p>
+
+    <h1 class="eh-display">
+      YOUR BRAND<br />
+      DESERVES<br />
+      A POINT OF VIEW.
+    </h1>
+
+    <div class="about-intro">
+
+      <p class="eh-lead">
+        EAST HOOD is a branding, strategy and production house built for brands
+        that refuse to disappear into the noise.
+      </p>
+
+      <p class="eh-lead">
+        We turn ideas into identities, identities into experiences, and
+        experiences into brands people remember.
+      </p>
+
+    </div>
+
+
+    <hr class="eh-rule" />
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <div class="about-stats">
+
+      @for (stat of stats; track stat.label) {
+        <div class="stat">
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      }
+
+    </div>
+
+
+    <hr class="eh-rule" />
+
+
+    <!-- =====================================================
+         PRINCIPLES
+    ====================================================== -->
+
+    <div class="about-principles">
+
+      <h2 class="eh-heading">HOW WE WORK</h2>
+
+      <div class="principle-list">
+
+        @for (principle of principles; track principle.index) {
+          <article class="principle">
+            <span class="principle-index">{{ principle.index }}</span>
+            <h3>{{ principle.title }}</h3>
+            <p>{{ principle.copy }}</p>
+          </article>
+        }
+
+      </div>
+
+    </div>
+
+
+    <hr class="eh-rule" />
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <div class="about-cta">
+
+      <h2 class="eh-heading">
+        YOUR BRAND CALLED.<br />
+        LET'S TALK.
+      </h2>
+
+      <a routerLink="/contact" class="eh-link">
+        START A PROJECT
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
+    </div>
+
+  </div>
+
+</section>

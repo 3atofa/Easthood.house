@@ -1,0 +1,89 @@
+@if (project(); as item) {
+
+  <article class="eh-page">
+
+    <div class="eh-container">
+
+      <a routerLink="/work" class="eh-link back-link">
+        <i class="fa-solid fa-arrow-left"></i>
+        ALL WORK
+      </a>
+
+      <p class="eh-eyebrow">{{ item.year }} <span>{{ item.category }}</span></p>
+
+      <h1 class="eh-display">{{ item.title | uppercase }}</h1>
+
+      <p class="eh-lead detail-excerpt">{{ item.excerpt }}</p>
+
+    </div>
+
+
+    <!-- =====================================================
+         COVER
+    ====================================================== -->
+
+    <div class="eh-container">
+      @if (item.cover) {
+        <div class="detail-cover">
+          <img [src]="item.cover" [alt]="item.title" />
+        </div>
+      }
+    </div>
+
+
+    <!-- =====================================================
+         META + BODY
+    ====================================================== -->
+
+    <div class="eh-container detail-grid">
+
+      <aside class="detail-meta">
+
+        <div>
+          <span class="meta-label">CLIENT</span>
+          <span class="meta-value">{{ item.client }}</span>
+        </div>
+
+        <div>
+          <span class="meta-label">YEAR</span>
+          <span class="meta-value">{{ item.year }}</span>
+        </div>
+
+        <div>
+          <span class="meta-label">SERVICES</span>
+          @for (service of item.services; track service) {
+            <span class="meta-value">{{ service }}</span>
+          }
+        </div>
+
+      </aside>
+
+      <div class="detail-body">
+        @for (paragraph of item.body; track $index) {
+          <p>{{ paragraph }}</p>
+        }
+      </div>
+
+    </div>
+
+
+    <hr class="eh-rule" />
+
+
+    <div class="eh-container detail-cta">
+
+      <h2 class="eh-heading">
+        YOUR BRAND CALLED.<br />
+        LET'S TALK.
+      </h2>
+
+      <a routerLink="/contact" class="eh-link">
+        START A PROJECT
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
+    </div>
+
+  </article>
+
+}

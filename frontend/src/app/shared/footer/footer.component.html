@@ -1,0 +1,36 @@
+<!-- =====================================================
+     EAST HOOD — SHARED FOOTER
+====================================================== -->
+
+<footer class="site-footer">
+
+  <!-- LOGO -->
+  <a routerLink="/" class="footer-logo">
+    EAST HOOD
+  </a>
+
+
+  <!-- NAVIGATION -->
+  <nav class="footer-nav">
+
+    @for (link of navLinks; track link.path) {
+      <a [routerLink]="link.path">{{ link.label }}</a>
+    }
+
+    <a [href]="site.instagram" target="_blank" rel="noopener">INSTAGRAM</a>
+
+    <a [href]="site.behance" target="_blank" rel="noopener">BEHANCE</a>
+
+    @for (link of legalLinks; track link.path) {
+      <a [routerLink]="link.path" class="is-muted">{{ link.label }}</a>
+    }
+
+  </nav>
+
+
+  <!-- COPYRIGHT -->
+  <span class="footer-copy">
+    © {{ year }} EAST HOOD. ALL RIGHTS RESERVED.
+  </span>
+
+</footer>

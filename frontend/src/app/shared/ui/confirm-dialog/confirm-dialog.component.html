@@ -1,0 +1,57 @@
+<app-modal
+  [title]="title"
+  [icon]="icon"
+  size="sm"
+  [busy]="busy"
+  [dismissable]="!busy"
+  (closed)="cancelled.emit()"
+>
+
+  <div modal-body class="flex flex-col gap-4">
+
+    <p class="text-[13px] leading-relaxed text-white/70">
+      {{ message }}
+    </p>
+
+    @if (detail) {
+      <div class="flex items-start gap-3 border border-[#c4453a]/30 bg-[#c4453a]/10 px-4 py-3">
+        <i class="fa-solid fa-circle-exclamation mt-0.5 text-[11px] text-[#e0685f]"></i>
+        <p class="text-[12px] leading-relaxed text-[#e0685f]">{{ detail }}</p>
+      </div>
+    }
+
+  </div>
+
+
+  <div modal-footer class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+
+    <button
+      type="button"
+      (click)="cancelled.emit()"
+      [disabled]="busy"
+      class="border border-white/15 px-5 py-2.5 text-[10px] tracking-[0.2em] text-white/70
+             transition-colors duration-200
+             hover:border-white/35 hover:text-white
+             disabled:cursor-not-allowed disabled:opacity-40"
+    >
+      {{ cancelLabel | uppercase }}
+    </button>
+
+    <button
+      type="button"
+      (click)="confirmed.emit()"
+      [disabled]="busy"
+      class="flex items-center justify-center gap-2.5 border px-5 py-2.5 text-[10px] tracking-[0.2em]
+             transition-all duration-300
+             disabled:cursor-not-allowed disabled:opacity-50"
+      [class]="confirmClass"
+    >
+      @if (busy) {
+        <i class="fa-solid fa-circle-notch fa-spin text-[11px]"></i>
+      }
+      {{ confirmLabel | uppercase }}
+    </button>
+
+  </div>
+
+</app-modal>

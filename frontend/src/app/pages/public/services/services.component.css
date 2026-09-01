@@ -1,0 +1,498 @@
+/* ============================================================
+   SERVICES / CAPABILITIES
+============================================================ */
+
+.services-lead {
+  margin-top: 40px;
+}
+
+
+.capability-list {
+  margin-top: 88px;
+
+  border-top: 1px solid var(--eh-line);
+}
+
+
+.capability {
+  display: grid;
+
+  gap: 20px;
+
+  padding: 44px 0;
+
+  border-bottom: 1px solid var(--eh-line);
+}
+
+
+@media (min-width: 1024px) {
+
+  .capability {
+    grid-template-columns: 60px minmax(0, 1.8fr) minmax(0, 1fr);
+
+    gap: 48px;
+
+    padding: 56px 0;
+  }
+}
+
+
+.capability-index {
+  font-size: 10px;
+
+  letter-spacing: 0.22em;
+
+  color: var(--eh-faint);
+}
+
+
+.capability-main h2 {
+  font-size: clamp(24px, 3.4vw, 44px);
+
+  font-weight: 500;
+
+  letter-spacing: -0.02em;
+
+  margin: 0 0 16px;
+}
+
+
+.capability-main p {
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  color: var(--eh-muted);
+
+  margin: 0;
+
+  max-width: 56ch;
+}
+
+
+.capability-deliverables {
+  list-style: none;
+
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+.capability-deliverables li {
+  font-size: 11px;
+
+  letter-spacing: 0.14em;
+
+  color: var(--eh-muted);
+
+  padding-left: 18px;
+
+  position: relative;
+}
+
+
+.capability-deliverables li::before {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+
+  top: 7px;
+
+  width: 6px;
+
+  height: 1px;
+
+  background: var(--eh-faint);
+}
+
+
+/* ============================================================
+   CTA
+============================================================ */
+
+.services-cta {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 32px;
+
+  padding-top: 88px;
+}
+
+
+@media (min-width: 900px) {
+
+  .services-cta {
+    flex-direction: row;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+  }
+}
+
+
+/* ============================================================
+   SERVICE PRICE
+
+   Each capability is priced on its own now. Bundles that
+   combine several live on the packages endpoint.
+============================================================ */
+
+.capability-price {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 8px;
+
+  margin-top: 26px;
+}
+
+
+.price-amount {
+  font-size: 22px;
+
+  font-variant-numeric: tabular-nums;
+
+  letter-spacing: -0.01em;
+}
+
+
+.price-currency {
+  font-size: 9px;
+
+  letter-spacing: 0.2em;
+
+  color: var(--eh-faint);
+}
+
+
+/* ============================================================
+   PACKAGES
+
+   Bundles of whole services. The card leads with the price
+   because that is the question a visitor arrives with, and
+   shows what the same services cost separately right beneath
+   it — the saving only means anything next to what it replaces.
+============================================================ */
+
+.packages-section {
+  padding-top: 96px;
+}
+
+
+.packages-lead {
+  margin-top: 28px;
+}
+
+
+.package-grid {
+  display: grid;
+
+  gap: 20px;
+
+  margin-top: 56px;
+}
+
+
+@media (min-width: 760px) {
+
+  .package-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+@media (min-width: 1180px) {
+
+  .package-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* ============================================================
+   CARD
+============================================================ */
+
+.package-card {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  border: 1px solid var(--eh-line);
+
+  padding: 32px 28px;
+
+  transition: border-color 400ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.package-card:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+
+  transform: translateY(-3px);
+}
+
+
+.package-card.is-popular {
+  border-color: rgba(232, 91, 23, 0.45);
+}
+
+
+.package-flag {
+  position: absolute;
+
+  top: -9px;
+
+  left: 28px;
+
+  background: #e85b17;
+
+  color: #fff;
+
+  font-size: 8px;
+
+  letter-spacing: 0.2em;
+
+  padding: 4px 10px;
+}
+
+
+.package-name {
+  margin: 0;
+
+  font-size: 22px;
+
+  font-weight: 500;
+
+  letter-spacing: -0.01em;
+}
+
+
+.package-desc {
+  margin: 12px 0 0;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+
+  color: var(--eh-muted);
+}
+
+
+/* ============================================================
+   PRICING
+============================================================ */
+
+.package-pricing {
+  margin-top: 26px;
+
+  padding-bottom: 24px;
+
+  border-bottom: 1px solid var(--eh-line);
+}
+
+
+.package-price-row {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 8px;
+}
+
+
+.package-price {
+  font-size: 38px;
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: -0.02em;
+
+  font-variant-numeric: tabular-nums;
+}
+
+
+.package-currency {
+  font-size: 10px;
+
+  letter-spacing: 0.2em;
+
+  color: var(--eh-faint);
+}
+
+
+.package-saving {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 8px;
+
+  margin: 12px 0 0;
+
+  font-size: 11px;
+
+  letter-spacing: 0.1em;
+
+  color: #78c8a0;
+}
+
+
+.package-was {
+  color: var(--eh-faint);
+
+  text-decoration: line-through;
+
+  font-variant-numeric: tabular-nums;
+}
+
+
+.package-billing {
+  margin: 8px 0 0;
+
+  font-size: 9px;
+
+  letter-spacing: 0.2em;
+
+  color: var(--eh-faint);
+}
+
+
+/* ============================================================
+   CONTENTS
+============================================================ */
+
+.package-includes {
+  flex: 1 1 auto;
+
+  padding: 24px 0 28px;
+}
+
+
+.package-includes-label {
+  margin: 0 0 14px;
+
+  font-size: 9px;
+
+  letter-spacing: 0.24em;
+
+  color: var(--eh-faint);
+}
+
+
+.package-services,
+.package-features {
+  list-style: none;
+
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+.package-features {
+  margin-top: 10px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+
+.package-services li,
+.package-features li {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 10px;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+.package-services li {
+  color: var(--eh-ink);
+}
+
+
+.package-features li {
+  color: var(--eh-muted);
+
+  font-size: 12px;
+}
+
+
+.package-services li i {
+  font-size: 10px;
+
+  color: #e85b17;
+
+  width: 12px;
+}
+
+
+.package-features li i {
+  font-size: 8px;
+
+  color: var(--eh-faint);
+
+  width: 12px;
+}
+
+
+/* ============================================================
+   CTA
+============================================================ */
+
+.package-cta {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: auto;
+
+  color: var(--eh-ink);
+
+  text-decoration: none;
+
+  font-size: 10px;
+
+  letter-spacing: 0.2em;
+
+  transition: gap 320ms ease, color 320ms ease;
+}
+
+
+.package-cta:hover {
+  gap: 20px;
+
+  color: #e85b17;
+}

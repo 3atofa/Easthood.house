@@ -1,0 +1,133 @@
+/* ============================================================
+   WORK DETAIL
+============================================================ */
+
+.back-link {
+  margin-bottom: 40px;
+}
+
+
+.detail-excerpt {
+  margin-top: 32px;
+}
+
+
+.detail-cover {
+  margin: 64px 0;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  border: 1px solid var(--eh-line);
+
+  background: #0c0c0c;
+}
+
+
+.detail-cover img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+
+/* ============================================================
+   GRID
+============================================================ */
+
+.detail-grid {
+  display: grid;
+
+  gap: 48px;
+
+  padding-bottom: 72px;
+}
+
+
+@media (min-width: 1024px) {
+
+  .detail-grid {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 2fr);
+
+    gap: 72px;
+  }
+}
+
+
+.detail-meta {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 32px;
+}
+
+
+.detail-meta > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.meta-label {
+  font-size: 9px;
+
+  letter-spacing: 0.24em;
+
+  color: var(--eh-faint);
+}
+
+
+.meta-value {
+  font-size: 13px;
+
+  color: var(--eh-ink);
+}
+
+
+.detail-body p {
+  font-size: clamp(15px, 1.5vw, 19px);
+
+  line-height: 1.75;
+
+  color: var(--eh-muted);
+
+  margin: 0 0 28px;
+
+  max-width: 68ch;
+}
+
+
+/* ============================================================
+   CTA
+============================================================ */
+
+.detail-cta {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 32px;
+
+  padding-top: 72px;
+}
+
+
+@media (min-width: 900px) {
+
+  .detail-cta {
+    flex-direction: row;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,176 @@
+/* ============================================================
+   CONTACT / START A PROJECT
+
+   The phone is a FULL-BLEED BACKGROUND on the section itself.
+   It has no element of its own, so it never takes part in
+   layout, and it spans the whole section rather than being
+   confined to a right-hand column. The form sits on top of a
+   scrim that keeps the dark text readable over it.
+
+   Source: 1024 x 1536 PNG, transparent cut-out (66% alpha),
+   phone hanging on a cord that runs the full height.
+
+   NOTE ON `cover`: the obvious full-bleed choice is
+   `background-size: cover`, and it is wrong for this asset.
+   The image is portrait (0.667) inside a landscape section, so
+   cover scales by width and the height overflows by ~2.5x —
+   you would see a cropped slice of the phone's middle, cord
+   and handset both gone. Sizing by height and letting it bleed
+   off the top and bottom edges gives the same edge-to-edge
+   feel while keeping the whole object recognisable.
+============================================================ */
+
+:host {
+  display: block;
+}
+
+
+.contact-section {
+  position: relative;
+
+  /* background-image comes from the Tailwind class in the template */
+
+  background-repeat: no-repeat;
+
+
+  /* ----------------------------------------------------------
+     MOBILE / TABLET (default, below 1024px)
+
+     Full height, centred, bleeding off the sides. The form
+     runs over it, so the scrim below does the heavy lifting.
+  ---------------------------------------------------------- */
+
+  background-position: center center;
+
+  background-size: auto 100%;
+
+  /* No padding reservation any more: the image is behind the
+     content now, not a band below it. */
+  padding-bottom: 0;
+}
+
+
+/* ============================================================
+   SCRIM
+
+   A pseudo-element, so the phone still owns no div of its own.
+   Sits between the background (z 0) and the form (z 20).
+
+   On phones the gradient runs top-to-bottom: heaviest where
+   the form starts, clearing towards the bottom so the handset
+   stays visible.
+============================================================ */
+
+.contact-section::before {
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(238, 231, 223, 0.95) 0%,
+    rgba(238, 231, 223, 0.9) 40%,
+    rgba(238, 231, 223, 0.55) 75%,
+    rgba(238, 231, 223, 0.25) 100%
+  );
+}
+
+
+/* Small phones: the image is proportionally huge against a
+   narrow viewport, so pull it back a little. */
+
+@media (max-width: 480px) {
+
+  .contact-section {
+    background-size: auto 85%;
+
+    background-position: center bottom;
+  }
+}
+
+
+/* ----------------------------------------------------------
+   DESKTOP (1024px and up)
+
+   Overscanned to 118% of the section height so the image runs
+   off both the top and bottom edges — that is what makes it
+   read as full-bleed rather than as a picture placed on the
+   page. Anchored right of centre so the phone falls opposite
+   the form.
+---------------------------------------------------------- */
+
+@media (min-width: 1024px) {
+
+  .contact-section {
+    background-position: right -2vw center;
+
+    background-size: auto 118%;
+  }
+
+  /* Horizontal scrim on desktop: solid under the 55% form
+     column, clearing before the phone so it is never veiled. */
+  .contact-section::before {
+    background: linear-gradient(
+      to right,
+      rgba(238, 231, 223, 0.97) 0%,
+      rgba(238, 231, 223, 0.95) 42%,
+      rgba(238, 231, 223, 0.6) 62%,
+      rgba(238, 231, 223, 0.15) 100%
+    );
+  }
+}
+
+
+/* Very wide screens: keep the phone from growing without bound
+   and drifting away from the content. */
+
+@media (min-width: 1800px) {
+
+  .contact-section {
+    background-size: auto 105%;
+
+    background-position: right 4vw center;
+  }
+}
+
+
+/* ============================================================
+   BOTTOM-RIGHT TAGLINE
+
+   Dark text, and on desktop it sits exactly where the scrim
+   has cleared to 15% — directly over the dark handset. Without
+   its own backdrop it disappears into the image.
+
+   A soft radial wash rather than a box: the text keeps floating
+   on the photo instead of turning into a card.
+============================================================ */
+
+.contact-tagline {
+  isolation: isolate;
+}
+
+.contact-tagline::before {
+  content: '';
+
+  position: absolute;
+
+  /* Bleeds well past the text so the fade is never a visible edge. */
+  inset: -28px -24px -24px -40px;
+
+  z-index: -1;
+
+  pointer-events: none;
+
+  background: radial-gradient(
+    120% 100% at 80% 60%,
+    rgba(238, 231, 223, 0.95) 0%,
+    rgba(238, 231, 223, 0.8) 45%,
+    rgba(238, 231, 223, 0) 100%
+  );
+}

@@ -1,0 +1,169 @@
+/* ============================================================
+   ABOUT
+============================================================ */
+
+.about-intro {
+  display: grid;
+
+  gap: 24px;
+
+  margin: 48px 0 72px;
+}
+
+
+@media (min-width: 900px) {
+
+  .about-intro {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 48px;
+  }
+}
+
+
+/* ============================================================
+   STATS
+============================================================ */
+
+.about-stats {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 40px 24px;
+
+  padding: 56px 0;
+}
+
+
+@media (min-width: 900px) {
+
+  .about-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+.stat {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.stat-value {
+  font-size: clamp(32px, 4vw, 56px);
+
+  font-weight: 500;
+
+  letter-spacing: -0.02em;
+
+  line-height: 1;
+}
+
+
+.stat-label {
+  font-size: 9px;
+
+  letter-spacing: 0.24em;
+
+  color: var(--eh-faint);
+}
+
+
+/* ============================================================
+   PRINCIPLES
+============================================================ */
+
+.about-principles {
+  display: grid;
+
+  gap: 40px;
+
+  padding: 72px 0;
+}
+
+
+@media (min-width: 1024px) {
+
+  .about-principles {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
+
+    gap: 64px;
+  }
+}
+
+
+.principle-list {
+  display: grid;
+
+  gap: 40px;
+}
+
+
+@media (min-width: 768px) {
+
+  .principle-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+.principle-index {
+  font-size: 10px;
+
+  letter-spacing: 0.24em;
+
+  color: var(--eh-faint);
+}
+
+
+.principle h3 {
+  font-size: 18px;
+
+  font-weight: 500;
+
+  letter-spacing: -0.01em;
+
+  margin: 14px 0 12px;
+}
+
+
+.principle p {
+  font-size: 13px;
+
+  line-height: 1.7;
+
+  color: var(--eh-muted);
+
+  margin: 0;
+}
+
+
+/* ============================================================
+   CTA
+============================================================ */
+
+.about-cta {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 32px;
+
+  padding-top: 72px;
+}
+
+
+@media (min-width: 900px) {
+
+  .about-cta {
+    flex-direction: row;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+  }
+}

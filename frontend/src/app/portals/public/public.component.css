@@ -1,0 +1,30 @@
+/* ============================================================
+   PUBLIC PORTAL SHELL
+============================================================ */
+
+:host {
+  display: block;
+
+  background: #050505;
+
+  color: #f2eee8;
+}
+
+
+.public-shell {
+  display: flex;
+
+  flex-direction: column;
+
+  min-height: 100vh;
+
+  overflow-x: hidden;
+}
+
+
+/* The navbar is fixed and floats over the hero, so no top padding here —
+   pages that do not open with a full-bleed hero add their own. */
+
+.public-main {
+  flex: 1 1 auto;
+}

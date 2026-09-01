@@ -1,0 +1,447 @@
+/* ============================================================
+   EAST HOOD — SHARED NAVBAR
+============================================================ */
+
+:host {
+  --eh-ink: #f2eee8;
+  --eh-black: #050505;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* ============================================================
+   BAR
+
+   Fixed so it can float over the hero, then translate out of
+   view on scroll down and back in on scroll up.
+============================================================ */
+
+.navbar {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  z-index: 120;
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 28px 3.5vw;
+
+  color: var(--eh-ink);
+
+  background: transparent;
+
+  border-bottom: 1px solid transparent;
+
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 420ms ease,
+    padding 420ms ease,
+    border-color 420ms ease;
+
+  will-change: transform;
+}
+
+
+/* Scrolled away from the hero — solid, tighter, hairline border. */
+
+.navbar.is-scrolled {
+  padding: 16px 3.5vw;
+
+  background: rgba(5, 5, 5, 0.86);
+
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+
+  backdrop-filter: blur(14px);
+
+  -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* Scrolling down — slide the whole bar out. */
+
+.navbar.is-hidden {
+  transform: translateY(-100%);
+}
+
+
+/* While the overlay is open the bar sits on top of it, no blur. */
+
+.navbar.is-menu-open {
+  background: transparent;
+
+  border-bottom-color: transparent;
+
+  backdrop-filter: none;
+
+  -webkit-backdrop-filter: none;
+
+  z-index: 140;
+}
+
+
+/* ============================================================
+   LOGO
+============================================================ */
+
+.logo {
+  color: inherit;
+
+  text-decoration: none;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.16em;
+
+  transition: opacity 250ms ease;
+}
+
+.logo:hover {
+  opacity: 0.6;
+}
+
+
+/* ============================================================
+   DESKTOP NAV
+============================================================ */
+
+.desktop-nav {
+  display: none;
+
+  align-items: center;
+
+  gap: 52px;
+
+  position: absolute;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+
+@media (min-width: 900px) {
+
+  .desktop-nav {
+    display: flex;
+  }
+}
+
+
+.desktop-nav a {
+  position: relative;
+
+  color: inherit;
+
+  text-decoration: none;
+
+  font-size: 11px;
+
+  letter-spacing: 0.2em;
+
+  padding-bottom: 4px;
+
+  transition:
+    opacity 250ms ease,
+    transform 250ms ease;
+}
+
+
+.desktop-nav a::after {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+
+  height: 1px;
+
+  background: currentColor;
+
+  transform: scaleX(0);
+
+  transform-origin: right;
+
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.desktop-nav a:hover {
+  opacity: 0.65;
+
+  transform: translateY(-2px);
+}
+
+
+.desktop-nav a:hover::after,
+.desktop-nav a.is-active::after {
+  transform: scaleX(1);
+
+  transform-origin: left;
+}
+
+
+/* ============================================================
+   MENU BUTTON
+============================================================ */
+
+.menu-button {
+  border: 0;
+
+  background: transparent;
+
+  color: inherit;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+
+/* From 900px up the inline nav is visible, so the burger has no job.
+   Same breakpoint as .desktop-nav — the two must never both show. */
+
+@media (min-width: 900px) {
+
+  .menu-button {
+    display: none;
+  }
+
+}
+
+
+.menu-label {
+  font-size: 10px;
+
+  letter-spacing: 0.2em;
+}
+
+
+.menu-circle {
+  width: 55px;
+  height: 55px;
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 13px;
+
+  transition:
+    background 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease;
+}
+
+
+.menu-button:hover .menu-circle {
+  background: var(--eh-ink);
+
+  border-color: var(--eh-ink);
+
+  color: var(--eh-black);
+}
+
+
+@media (max-width: 640px) {
+
+  .menu-circle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .menu-label {
+    display: none;
+  }
+}
+
+
+/* ============================================================
+   OVERLAY MENU
+============================================================ */
+
+.menu-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 130;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 48px;
+
+  padding: 140px 3.5vw 64px;
+
+  background: var(--eh-black);
+
+  color: var(--eh-ink);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  clip-path: inset(0 0 100% 0);
+
+  transition:
+    clip-path 620ms cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 320ms ease,
+    visibility 0s linear 620ms;
+}
+
+
+.menu-overlay.is-open {
+  opacity: 1;
+
+  visibility: visible;
+
+  clip-path: inset(0 0 0 0);
+
+  transition:
+    clip-path 620ms cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 320ms ease,
+    visibility 0s;
+}
+
+
+.menu-links {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.menu-links a {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 20px;
+
+  color: inherit;
+
+  text-decoration: none;
+
+  transition: opacity 300ms ease;
+}
+
+
+.menu-links a:hover {
+  opacity: 0.45;
+}
+
+
+.menu-index {
+  font-size: 10px;
+
+  letter-spacing: 0.22em;
+
+  color: rgba(242, 238, 232, 0.4);
+}
+
+
+.menu-word {
+  font-size: clamp(38px, 11vw, 76px);
+
+  font-weight: 500;
+
+  line-height: 1.02;
+
+  letter-spacing: -0.02em;
+}
+
+
+.menu-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 28px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  padding-top: 28px;
+}
+
+
+.menu-meta a {
+  color: rgba(242, 238, 232, 0.6);
+
+  text-decoration: none;
+
+  font-size: 10px;
+
+  letter-spacing: 0.2em;
+
+  transition: color 250ms ease;
+}
+
+
+.menu-meta a:hover {
+  color: var(--eh-ink);
+}
+
+
+
+/* ============================================================
+   LIGHT THEME
+
+   Pages on a light ground (contact) flip the bar's ink via
+   route data — see app.routes.ts `data: { navTheme: 'light' }`.
+============================================================ */
+
+.navbar.is-light {
+  color: #111111;
+}
+
+
+.navbar.is-light.is-scrolled {
+  background: rgba(238, 231, 223, 0.9);
+
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+}
+
+
+.navbar.is-light .menu-circle {
+  border-color: rgba(0, 0, 0, 0.35);
+}
+
+
+.navbar.is-light .menu-button:hover .menu-circle {
+  background: #111111;
+
+  border-color: #111111;
+
+  color: #eee7df;
+}

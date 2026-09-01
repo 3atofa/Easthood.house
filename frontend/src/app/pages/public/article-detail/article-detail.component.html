@@ -1,0 +1,109 @@
+@if (article(); as item) {
+
+  <article class="eh-page">
+
+    <div class="eh-container">
+
+      <!-- Breadcrumb as real links, matching the BreadcrumbList schema -->
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a routerLink="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a routerLink="/articles">Insights</a>
+      </nav>
+
+      <p class="eh-eyebrow">
+        {{ item.category | uppercase }}
+        <span>{{ item.readingMinutes }} MIN READ</span>
+      </p>
+
+      <!-- The page's one h1 -->
+      <h1 class="article-headline">{{ item.title }}</h1>
+
+      <p class="eh-lead article-standfirst">{{ item.excerpt }}</p>
+
+      <div class="byline">
+        <span>{{ item.author }}</span>
+        <span aria-hidden="true">·</span>
+        <time [attr.datetime]="item.publishedAt">
+          {{ item.publishedAt | date: 'd MMMM y' }}
+        </time>
+      </div>
+
+    </div>
+
+
+    @if (item.coverImage) {
+      <div class="eh-container">
+        <figure class="article-cover">
+          <img
+            [src]="item.coverImage"
+            [alt]="item.coverAlt || item.title"
+            fetchpriority="high"
+            decoding="async"
+          />
+          @if (item.coverAlt) {
+            <figcaption>{{ item.coverAlt }}</figcaption>
+          }
+        </figure>
+      </div>
+    }
+
+
+    <div class="eh-container article-body">
+      @for (paragraph of paragraphs(); track $index) {
+        <p>{{ paragraph }}</p>
+      }
+    </div>
+
+
+    @if (item.tags.length) {
+      <div class="eh-container article-tags">
+        @for (tag of item.tags; track tag) {
+          <span class="tag">{{ tag | uppercase }}</span>
+        }
+      </div>
+    }
+
+
+    <hr class="eh-rule" />
+
+
+    <!-- Prev/next as real links — internal linking a crawler can follow -->
+    <nav class="eh-container article-nav" aria-label="More articles">
+
+      @if (previous(); as prev) {
+        <a class="nav-link is-prev" [routerLink]="['/articles', prev.slug]" rel="prev">
+          <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> PREVIOUS</span>
+          <span class="nav-title">{{ prev.title }}</span>
+        </a>
+      } @else {
+        <span></span>
+      }
+
+      @if (next(); as following) {
+        <a class="nav-link is-next" [routerLink]="['/articles', following.slug]" rel="next">
+          <span class="nav-label">NEXT <i class="fa-solid fa-arrow-right"></i></span>
+          <span class="nav-title">{{ following.title }}</span>
+        </a>
+      }
+
+    </nav>
+
+
+    <div class="eh-container article-cta">
+
+      <h2 class="eh-heading">
+        YOUR BRAND CALLED.<br />
+        LET'S TALK.
+      </h2>
+
+      <a routerLink="/contact" class="eh-link">
+        START A PROJECT
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+
+    </div>
+
+  </article>
+
+}

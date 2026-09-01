@@ -1,0 +1,419 @@
+<header class="mb-6 flex flex-wrap items-end justify-between gap-4">
+
+  <div>
+    <p class="text-[9px] tracking-[0.28em] text-white/35">CATALOGUE</p>
+    <h1 class="mt-2 text-[26px] font-medium tracking-[-0.01em]">Packages</h1>
+    <p class="mt-1.5 text-[13px] text-white/45">
+      Combinations of services, sold together at one price.
+    </p>
+  </div>
+
+  <button
+    type="button"
+    (click)="openCreate()"
+    [disabled]="!services().length"
+    class="flex items-center gap-2.5 border border-[#f2eee8] bg-[#f2eee8] px-5 py-2.5
+           text-[10px] tracking-[0.2em] text-[#050505]
+           transition-all duration-300 hover:bg-transparent hover:text-[#f2eee8]
+           disabled:cursor-not-allowed disabled:opacity-40"
+  >
+    <i class="fa-solid fa-plus text-[10px]"></i>
+    NEW PACKAGE
+  </button>
+
+</header>
+
+
+@if (error()) {
+  <div class="mb-5 flex items-start gap-3 rounded-lg border border-[#c4453a]/40 bg-[#c4453a]/10 px-4 py-3">
+    <i class="fa-solid fa-circle-exclamation mt-0.5 text-[12px] text-[#e0685f]"></i>
+    <p class="text-[12px] leading-relaxed text-[#e0685f]">{{ error() }}</p>
+  </div>
+}
+
+
+@if (!loading() && !services().length) {
+  <div class="mb-5 flex items-start gap-3 rounded-lg border border-[#e0be6e]/40 bg-[#e0be6e]/10 px-4 py-3">
+    <i class="fa-solid fa-triangle-exclamation mt-0.5 text-[12px] text-[#e0be6e]"></i>
+    <p class="text-[12px] leading-relaxed text-[#e0be6e]">
+      There are no services yet. A package bundles services, so add those first.
+    </p>
+  </div>
+}
+
+
+@if (loading()) {
+
+  <div class="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
+    @for (row of [1,2,3]; track row) {
+      <div class="h-64 animate-pulse rounded-xl border border-white/10 bg-[#131316]"></div>
+    }
+  </div>
+
+} @else if (!rows().length) {
+
+  <div class="rounded-xl border border-white/10 bg-[#131316]">
+    <app-empty-state
+      icon="fa-boxes-stacked"
+      title="No packages yet"
+      message="Combine two or more services and price the bundle below their total."
+    />
+  </div>
+
+} @else {
+
+  <div class="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
+
+    @for (pkg of rows(); track pkg.id) {
+
+      <article
+        (click)="openEdit(pkg)"
+        class="relative flex cursor-pointer flex-col rounded-xl border bg-[#131316] p-5
+               transition-colors duration-200"
+        [class]="pkg.isPopular ? 'border-[#e85b17]/40 hover:border-[#e85b17]/70' : 'border-white/10 hover:border-white/20'"
+      >
+
+        @if (pkg.isPopular) {
+          <span class="absolute -top-2 left-5 rounded-full bg-[#e85b17] px-2 py-0.5 text-[8px] tracking-[0.14em] text-white">
+            POPULAR
+          </span>
+        }
+
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <p class="truncate text-[15px] font-medium">{{ pkg.name }}</p>
+            <p class="mt-0.5 text-[10px] tracking-[0.14em] text-white/35">
+              {{ pkg.billingPeriod | uppercase }}
+            </p>
+          </div>
+          @if (!pkg.isActive) {
+            <span class="shrink-0 rounded-full border border-white/15 px-2 py-0.5 text-[8px] tracking-[0.14em] text-white/40">
+              OFF
+            </span>
+          }
+        </div>
+
+
+        <!-- PRICE vs what it replaces -->
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-[26px] font-medium tabular-nums">
+            {{ pkg.price | number: '1.0-0' }}
+          </span>
+          <span class="text-[10px] tracking-[0.14em] text-white/40">{{ pkg.currency }}</span>
+          @if (pkg.savings > 0) {
+            <span class="text-[13px] text-white/30 line-through tabular-nums">
+              {{ pkg.servicesTotal | number: '1.0-0' }}
+            </span>
+          }
+        </div>
+
+        @if (pkg.savings > 0) {
+          <p class="mt-1.5 text-[11px] text-[#78c8a0]">
+            Saves {{ pkg.savings | number: '1.0-0' }} {{ pkg.currency }}
+            ({{ pkg.savingsPercent }}%)
+          </p>
+        } @else {
+          <p class="mt-1.5 text-[11px] text-[#e0be6e]">
+            Priced at or above the sum of its services.
+          </p>
+        }
+
+
+        <!-- WHAT'S IN IT -->
+        <div class="mt-4 flex flex-wrap gap-1.5">
+          @for (service of pkg.services; track service.id) {
+            <span class="flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-white/55">
+              @if (service.icon) {
+                <i class="fa-solid text-[9px] text-[#e85b17]" [class]="service.icon"></i>
+              }
+              {{ service.title }}
+            </span>
+          } @empty {
+            <span class="text-[11px] text-[#e0685f]">
+              No services — this bundle needs repricing.
+            </span>
+          }
+        </div>
+
+        @if (pkg.description) {
+          <p class="mt-3 line-clamp-2 text-[12px] leading-relaxed text-white/40">
+            {{ pkg.description }}
+          </p>
+        }
+
+        <div class="mt-auto flex items-center justify-end gap-1 border-t border-white/5 pt-4">
+          <button type="button" (click)="openEdit(pkg); $event.stopPropagation()" aria-label="Edit package"
+            class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                   transition-colors duration-200 hover:bg-white/5 hover:text-white">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button type="button" (click)="askDelete(pkg, $event)" aria-label="Delete package"
+            class="flex h-8 w-8 items-center justify-center rounded-lg text-[12px] text-white/40
+                   transition-colors duration-200 hover:bg-[#c4453a]/15 hover:text-[#e0685f]">
+            <i class="fa-regular fa-trash-can"></i>
+          </button>
+        </div>
+
+      </article>
+
+    }
+
+  </div>
+
+}
+
+
+<!-- =====================================================
+     PACKAGE MODAL
+====================================================== -->
+
+@if (formOpen()) {
+
+  <app-modal
+    [title]="editing() ? 'Edit package' : 'New package'"
+    subtitle="Pick the services, then set the bundle price."
+    icon="fa-boxes-stacked"
+    size="xl"
+    [busy]="saving()"
+    (closed)="formOpen.set(false)"
+  >
+
+    <form modal-body [formGroup]="form" class="flex flex-col gap-5">
+
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">PACKAGE NAME</span>
+        <input type="text" formControlName="name" placeholder="Launch Kit"
+          class="rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                 transition-colors duration-200 placeholder:text-white/25 focus:border-white/30" />
+        @if (invalid('name')) {
+          <span class="text-[11px] text-[#e0685f]">Name is required.</span>
+        }
+      </label>
+
+
+      <!-- ===============================================
+           SERVICE PICKER
+      ================================================ -->
+
+      <div class="rounded-lg border border-white/10 bg-black/20 p-4">
+
+        <div class="mb-3 flex items-center justify-between">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">SERVICES IN THIS PACKAGE</span>
+          <span class="text-[11px] text-white/40">
+            {{ selectedIds().length }} selected
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+
+          @for (service of services(); track service.id) {
+
+            <button
+              type="button"
+              (click)="toggleService(service.id)"
+              class="flex items-center gap-3 rounded-lg border px-3.5 py-3 text-left transition-colors duration-200"
+              [class]="isSelected(service.id)
+                ? 'border-[#e85b17]/60 bg-[#e85b17]/10'
+                : 'border-white/10 hover:border-white/25'"
+            >
+
+              <span
+                class="flex h-5 w-5 shrink-0 items-center justify-center rounded border text-[9px]"
+                [class]="isSelected(service.id)
+                  ? 'border-[#e85b17] bg-[#e85b17] text-white'
+                  : 'border-white/25 text-transparent'"
+              >
+                <i class="fa-solid fa-check"></i>
+              </span>
+
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-[13px]">{{ service.title }}</span>
+                <span class="block text-[11px] tabular-nums text-white/40">
+                  {{ service.price | number: '1.0-0' }} {{ service.currency }}
+                </span>
+              </span>
+
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- ===============================================
+           PRICING — with the live saving
+      ================================================ -->
+
+      <div class="rounded-lg border border-white/10 bg-black/20 p-4">
+
+        <p class="mb-4 text-[9px] tracking-[0.2em] text-white/35">BUNDLE PRICE</p>
+
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+
+          <label class="flex flex-col gap-2">
+            <span class="text-[9px] tracking-[0.18em] text-white/35">PRICE</span>
+            <input type="number" min="0" step="0.01" formControlName="price"
+              class="rounded-lg border border-white/10 bg-[#131316] px-3 py-2.5 text-[13px] tabular-nums
+                     outline-none transition-colors duration-200 focus:border-white/30" />
+            @if (invalid('price')) {
+              <span class="text-[11px] text-[#e0685f]">Enter a price.</span>
+            }
+          </label>
+
+          <label class="flex flex-col gap-2">
+            <span class="text-[9px] tracking-[0.18em] text-white/35">CURRENCY</span>
+            <input type="text" maxlength="3" formControlName="currency"
+              class="rounded-lg border border-white/10 bg-[#131316] px-3 py-2.5 text-[13px] uppercase
+                     outline-none transition-colors duration-200 focus:border-white/30" />
+          </label>
+
+          <label class="flex flex-col gap-2">
+            <span class="text-[9px] tracking-[0.18em] text-white/35">BILLING</span>
+            <select formControlName="billingPeriod"
+              class="cursor-pointer rounded-lg border border-white/10 bg-[#131316] px-3 py-2.5 text-[13px]
+                     outline-none transition-colors duration-200 focus:border-white/30">
+              @for (period of billingPeriods; track period) {
+                <option [value]="period" class="bg-[#131316]">{{ period }}</option>
+              }
+            </select>
+          </label>
+
+        </div>
+
+
+        <div class="mt-4 grid grid-cols-3 gap-3 border-t border-white/10 pt-4">
+
+          <div>
+            <p class="text-[9px] tracking-[0.18em] text-white/35">SERVICES TOTAL</p>
+            <p class="mt-1.5 text-[16px] tabular-nums text-white/70">
+              {{ preview.total | number: '1.0-0' }}
+            </p>
+          </div>
+
+          <div>
+            <p class="text-[9px] tracking-[0.18em] text-white/35">CLIENT PAYS</p>
+            <p class="mt-1.5 text-[16px] font-medium tabular-nums text-[#e85b17]">
+              {{ preview.price | number: '1.0-0' }}
+            </p>
+          </div>
+
+          <div>
+            <p class="text-[9px] tracking-[0.18em] text-white/35">THEY SAVE</p>
+            <p class="mt-1.5 text-[16px] tabular-nums"
+               [class]="preview.savings > 0 ? 'text-[#78c8a0]' : 'text-white/30'">
+              {{ preview.savings | number: '1.0-0' }}
+              @if (preview.percent > 0) {
+                <span class="text-[11px]">({{ preview.percent }}%)</span>
+              }
+            </p>
+          </div>
+
+        </div>
+
+        @if (preview.overpriced) {
+          <p class="mt-3 flex items-start gap-2 text-[11px] leading-relaxed text-[#e0be6e]">
+            <i class="fa-solid fa-triangle-exclamation mt-0.5 text-[10px]"></i>
+            This bundle costs more than buying the services separately. That is
+            allowed, but the public page will not show a saving.
+          </p>
+        }
+
+        @if (!selectedIds().length) {
+          <p class="mt-3 flex items-start gap-2 text-[11px] leading-relaxed text-white/40">
+            <i class="fa-solid fa-circle-info mt-0.5 text-[10px]"></i>
+            Pick some services above and the totals will fill in.
+          </p>
+        }
+
+      </div>
+
+
+      <label class="flex flex-col gap-2">
+        <span class="text-[9px] tracking-[0.2em] text-white/35">DESCRIPTION</span>
+        <textarea rows="2" formControlName="description"
+          class="resize-y rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-[13px]
+                 leading-relaxed outline-none transition-colors duration-200 focus:border-white/30"></textarea>
+      </label>
+
+
+      <div class="flex flex-col gap-2.5" formArrayName="features">
+        <div class="flex items-center justify-between">
+          <span class="text-[9px] tracking-[0.2em] text-white/35">EXTRAS BEYOND THE SERVICES</span>
+          <button type="button" (click)="addFeature()"
+            class="flex items-center gap-2 text-[11px] text-white/45 transition-colors hover:text-white">
+            <i class="fa-solid fa-plus text-[9px]"></i> Add
+          </button>
+        </div>
+        @for (control of features.controls; track $index) {
+          <div class="flex gap-2">
+            <input type="text" [formControlName]="$index" placeholder="Twelve months of support"
+              class="flex-1 rounded-lg border border-white/10 bg-black/20 px-4 py-2.5 text-[13px] outline-none
+                     transition-colors duration-200 placeholder:text-white/25 focus:border-white/30" />
+            <button type="button" (click)="removeFeature($index)" aria-label="Remove"
+              class="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-lg border border-white/10
+                     text-[12px] text-white/40 transition-colors duration-200
+                     hover:border-[#c4453a]/40 hover:text-[#e0685f]">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        }
+      </div>
+
+
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+        <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-black/20 px-4 py-3.5">
+          <input type="checkbox" formControlName="isPopular" class="peer sr-only" />
+          <span class="relative h-5 w-9 shrink-0 rounded-full bg-white/15 transition-colors duration-200 peer-checked:bg-[#e85b17]">
+            <span class="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-200 peer-checked:translate-x-4"></span>
+          </span>
+          <span class="text-[13px]">Highlight as popular</span>
+        </label>
+
+        <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-black/20 px-4 py-3.5">
+          <input type="checkbox" formControlName="isActive" class="peer sr-only" />
+          <span class="relative h-5 w-9 shrink-0 rounded-full bg-white/15 transition-colors duration-200 peer-checked:bg-[#78c8a0]">
+            <span class="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-200 peer-checked:translate-x-4"></span>
+          </span>
+          <span class="text-[13px]">Offered on the site</span>
+        </label>
+
+      </div>
+
+    </form>
+
+
+    <div modal-footer class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+      <button type="button" (click)="formOpen.set(false)" [disabled]="saving()"
+        class="border border-white/15 px-5 py-2.5 text-[10px] tracking-[0.2em] text-white/70
+               transition-colors duration-200 hover:border-white/35 hover:text-white
+               disabled:cursor-not-allowed disabled:opacity-40">CANCEL</button>
+      <button type="button" (click)="save()" [disabled]="saving()"
+        class="flex items-center justify-center gap-2.5 border border-[#f2eee8] bg-[#f2eee8]
+               px-5 py-2.5 text-[10px] tracking-[0.2em] text-[#050505]
+               transition-all duration-300 hover:bg-transparent hover:text-[#f2eee8]
+               disabled:cursor-not-allowed disabled:opacity-50">
+        @if (saving()) { <i class="fa-solid fa-circle-notch fa-spin text-[11px]"></i> }
+        {{ editing() ? 'SAVE CHANGES' : 'CREATE PACKAGE' }}
+      </button>
+    </div>
+
+  </app-modal>
+
+}
+
+
+@if (deleting(); as pkg) {
+  <app-confirm-dialog
+    title="Delete this package?"
+    [message]="pkg.name + ' will be removed from the site.'"
+    detail="The services inside it are not affected — only the bundle and its price."
+    confirmLabel="Delete"
+    tone="danger"
+    [busy]="deleteBusy()"
+    (confirmed)="confirmDelete()"
+    (cancelled)="deleting.set(null)"
+  />
+}

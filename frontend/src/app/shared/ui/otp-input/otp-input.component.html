@@ -1,0 +1,57 @@
+<!-- =====================================================
+     OTP INPUT
+
+     dir="ltr" is load-bearing, not decoration. Inside an
+     RTL page a normal row would render box 1 on the RIGHT,
+     so the first digit typed would land in what looks like
+     the last box and the code would read backwards against
+     the email that sent it. Pinning the row to ltr keeps
+     index 0 = leftmost = first digit, in every locale.
+
+     unicode-bidi:isolate stops the row from inheriting the
+     surrounding paragraph direction.
+====================================================== -->
+
+<div
+  dir="ltr"
+  role="group"
+  [attr.aria-label]="'Enter the ' + length + '-digit verification code'"
+  class="flex items-center justify-center gap-2 sm:gap-3"
+  style="unicode-bidi: isolate;"
+  (paste)="onPaste($event)"
+>
+
+  @for (slot of slots; track slot) {
+
+    <input
+      #box
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      maxlength="1"
+      dir="ltr"
+      [attr.autocomplete]="slot === 0 ? 'one-time-code' : 'off'"
+      [attr.aria-label]="'Digit ' + (slot + 1)"
+      [disabled]="disabled"
+      [value]="digits()[slot] || ''"
+      (input)="onInput(slot, $event)"
+      (keydown)="onKeydown(slot, $event)"
+      (focus)="onFocus($event)"
+      class="h-14 w-11 rounded-lg border bg-black/20 text-center text-[20px] font-medium
+             tabular-nums text-[#f2eee8] caret-[#e85b17]
+             outline-none transition-colors duration-200
+             focus:border-[#e85b17]
+             disabled:cursor-not-allowed disabled:opacity-40
+             sm:h-16 sm:w-13 sm:text-[24px]"
+      [class]="invalid ? 'border-[#c4453a]' : 'border-white/15'"
+    />
+
+    <!-- A separator in the middle makes a 6-digit code easier to read
+         back against the email, the way 123 456 is grouped there. -->
+    @if (length === 6 && slot === 2) {
+      <span aria-hidden="true" class="px-0.5 text-white/20">–</span>
+    }
+
+  }
+
+</div>

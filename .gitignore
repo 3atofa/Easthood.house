@@ -1,0 +1,48 @@
+# ============================================================
+# EAST HOOD
+# ============================================================
+
+# ---- secrets ----
+# .env holds the database password, both JWT secrets, the Gmail app
+# password and the seeded admin password. It must never be committed.
+# Use .env.example as the template.
+.env
+.env.*
+!.env.example
+
+# ---- dependencies ----
+node_modules/
+.npm/
+package-lock.json.bak
+
+# ---- build output ----
+dist/
+dist-backup-*/
+out-tsc/
+/frontend/.angular/
+*.tsbuildinfo
+
+# Generated before each build from the live API.
+/frontend/routes.txt
+
+# ---- logs ----
+*.log
+npm-debug.log*
+logs/
+
+# ---- editors / OS ----
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- misc ----
+coverage/
+.tmp/
+*.tar.gz
+_frontend-git-backup/
+_to_delete/

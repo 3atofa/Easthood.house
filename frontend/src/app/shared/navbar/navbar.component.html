@@ -1,0 +1,100 @@
+<!-- =====================================================
+     EAST HOOD — SHARED PUBLIC NAVBAR
+     Transparent over the hero, solid once scrolled,
+     hidden on scroll down and revealed on scroll up.
+====================================================== -->
+
+<header
+  class="navbar"
+  [class.is-hidden]="!barVisible()"
+  [class.is-scrolled]="scrolled()"
+  [class.is-menu-open]="menuOpen()"
+  [class.is-light]="theme() === 'light' && !menuOpen()"
+>
+
+  <!-- LOGO -->
+  <a
+    routerLink="/"
+    class="logo"
+    (click)="closeMenu()"
+  >
+    EAST HOOD
+  </a>
+
+
+  <!-- DESKTOP NAVIGATION -->
+  <nav class="desktop-nav">
+
+    @for (link of links; track link.path) {
+      <a
+        [routerLink]="link.path"
+        routerLinkActive="is-active"
+      >
+        {{ link.label }}
+      </a>
+    }
+
+  </nav>
+
+
+  <!-- MENU TOGGLE -->
+  <button
+    type="button"
+    class="menu-button"
+    [attr.aria-expanded]="menuOpen()"
+    aria-controls="eh-menu"
+    [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+    (click)="toggleMenu()"
+  >
+
+    <span class="menu-label">
+      {{ menuOpen() ? 'CLOSE' : 'MENU' }}
+    </span>
+
+    <span class="menu-circle">
+      <i class="fa-solid" [class]="menuOpen() ? 'fa-xmark' : 'fa-bars'"></i>
+    </span>
+
+  </button>
+
+</header>
+
+
+<!-- =====================================================
+     FULL SCREEN OVERLAY MENU
+====================================================== -->
+
+<div
+  id="eh-menu"
+  class="menu-overlay"
+  [class.is-open]="menuOpen()"
+  [attr.aria-hidden]="!menuOpen()"
+>
+
+  <nav class="menu-links">
+
+    @for (link of links; track link.path) {
+      <a
+        [routerLink]="link.path"
+        (click)="closeMenu()"
+      >
+        <span class="menu-index">({{ link.index }})</span>
+        <span class="menu-word">{{ link.label }}</span>
+      </a>
+    }
+
+  </nav>
+
+  <div class="menu-meta">
+
+    <a [href]="'mailto:' + site.email">
+      {{ site.email | uppercase }}
+    </a>
+
+    <a [href]="'tel:' + site.phone.split(' ').join('')">
+      {{ site.phone }}
+    </a>
+
+  </div>
+
+</div>

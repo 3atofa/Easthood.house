@@ -1,0 +1,891 @@
+<!-- =========================================================
+     EAST HOOD — HOME PAGE
+========================================================= -->
+
+<div class="east-hood-page">
+
+  <!-- =======================================================
+       HERO SLIDER
+  ======================================================== -->
+
+  <section class="hero-slider">
+
+    <!-- =====================================================
+         SLIDES TRACK
+    ====================================================== -->
+
+    <div
+      class="slides-track"
+      [style.transform]="'translateX(-' + (currentSlide * 50) + '%)'"
+    >
+
+      <!-- ===================================================
+           SLIDE 01 — HERO IMAGE
+      ==================================================== -->
+
+      <article class="hero-slide hero-slide-image">
+
+        <!-- Background image -->
+
+        <img
+          src="/hero section bg.png"
+          alt=""
+          class="hero-background"
+        />
+
+        <!-- Dark overlay -->
+
+        <div class="hero-overlay"></div>
+
+        <!-- Left gradient -->
+
+        <div class="hero-gradient"></div>
+
+
+        <!-- =================================================
+             HERO CONTENT
+        ================================================== -->
+
+        <div class="hero-content">
+
+          <div class="hero-content-inner">
+
+            <!-- Small heading -->
+
+            <div class="hero-services">
+
+              <span>BRANDING.</span>
+
+              <span>STRATEGY.</span>
+
+              <span>PRODUCTION.</span>
+
+            </div>
+
+
+            <!-- Orange dot -->
+
+            <div class="orange-dot"></div>
+
+
+            <!-- Main heading -->
+
+            <h1 class="hero-title">
+
+              <span>YOUR BRAND</span>
+
+              <span>
+                IS
+                <em>CALLING.</em>
+              </span>
+
+            </h1>
+
+
+            <!-- Subtitle -->
+
+            <p class="hero-subtitle">
+              IT'S TIME TO PICK UP.
+            </p>
+
+
+            <!-- Showreel -->
+
+            <button
+              type="button"
+              class="showreel-button"
+              (click)="goToSlide(1)"
+            >
+
+              <span class="play-circle">
+
+                <i class="fa-solid fa-play"></i>
+
+              </span>
+
+              <span>
+                WATCH SHOWREEL
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LEFT SIDE BRAND
+        ================================================== -->
+
+        <div class="side-brand">
+
+          <span>
+            EAST HOOD
+          </span>
+
+          <div class="side-orange-line"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             SCROLL INDICATOR
+        ================================================== -->
+
+        <button
+          type="button"
+          class="scroll-indicator"
+          (click)="scrollToContent()"
+        >
+
+          <span class="scroll-line"></span>
+
+          <span class="scroll-text">
+            SCROLL
+          </span>
+
+        </button>
+
+
+        <!-- =================================================
+             SLIDE COUNTER
+        ================================================== -->
+
+        <div class="slider-controls">
+
+          <!-- Previous -->
+
+          <button
+            type="button"
+            class="arrow-button"
+            (click)="previousSlide()"
+            aria-label="Previous slide"
+          >
+            
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+
+          </button>
+
+
+          <!-- Counter -->
+
+          <div class="slide-counter">
+
+            <span class="current-number">
+              {{ currentSlide + 1 | number:'2.0-0' }}
+            </span>
+
+            <span class="slash">
+              /
+            </span>
+
+            <span class="total-number">
+              02
+            </span>
+
+          </div>
+
+
+          <!-- Next -->
+
+          <button
+            type="button"
+            class="arrow-button"
+            (click)="nextSlide()"
+            aria-label="Next slide"
+          >
+
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+
+          </button>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- ===================================================
+           SLIDE 02 — VIDEO
+      ==================================================== -->
+
+      <article class="hero-slide hero-slide-video">
+
+        <!-- Video -->
+
+        <video
+          class="hero-video"
+          src="/intro video.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+        ></video>
+
+
+        <!-- Dark overlay -->
+
+        <div class="video-overlay"></div>
+
+
+        <!-- Gradient -->
+
+        <div class="video-gradient"></div>
+
+
+        <!-- =================================================
+             VIDEO CONTENT
+        ================================================== -->
+
+        <div class="hero-content">
+
+          <div class="video-content-inner">
+
+            <div class="video-label">
+
+              <span>
+                (02)
+              </span>
+
+              <span class="video-label-line"></span>
+
+              <span>
+                EAST HOOD
+              </span>
+
+            </div>
+
+
+            <h2 class="video-title">
+
+              <span>
+                WE BUILD
+              </span>
+
+              <span>
+                <em>BRANDS</em>
+              </span>
+
+              <span>
+                THAT LEAD.
+              </span>
+
+            </h2>
+
+
+            <p class="video-description">
+
+              Strategy, identity, creative direction
+              and production — built for brands
+              with ambition.
+
+            </p>
+
+
+            <button
+              type="button"
+              class="back-to-first"
+              (click)="goToSlide(0)"
+            >
+
+              <span class="play-circle">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+              </span>
+
+              <span>
+                BACK TO INTRO
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SLIDE COUNTER
+        ================================================== -->
+
+        <div class="slider-controls">
+
+          <button
+            type="button"
+            class="arrow-button"
+            (click)="previousSlide()"
+            aria-label="Previous slide"
+          >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+          </button>
+
+
+          <div class="slide-counter">
+
+            <span class="current-number">
+              {{ currentSlide + 1 | number:'2.0-0' }}
+            </span>
+
+            <span class="slash">
+              /
+            </span>
+
+            <span class="total-number">
+              02
+            </span>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="arrow-button"
+            (click)="nextSlide()"
+            aria-label="Next slide"
+          >
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+          </button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       WORK SECTION
+       THIS IS WHAT YOU CAN SCROLL TO
+  ======================================================== -->
+
+  <section
+    id="work"
+    class="content-section work-section"
+  >
+
+    <div class="section-top">
+
+      <span>
+        (01)
+      </span>
+
+      <span class="section-line"></span>
+
+      <span>
+        SELECTED WORK
+      </span>
+
+    </div>
+
+
+    <div class="section-heading">
+
+      <h2>
+        WE MAKE
+        <br />
+
+        <em>BRANDS</em>
+        <br />
+
+        IMPOSSIBLE
+        <br />
+
+        TO IGNORE.
+      </h2>
+
+    </div>
+
+
+    <div class="work-grid">
+
+      <div class="work-card">
+
+        <div class="work-number">
+          01
+        </div>
+
+        <div class="work-card-content">
+
+          <span>
+            BRAND IDENTITY
+          </span>
+
+          <h3>
+            Strategic
+            <br />
+            Identity
+          </h3>
+
+        </div>
+
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+      </div>
+
+
+      <div class="work-card">
+
+        <div class="work-number">
+          02
+        </div>
+
+        <div class="work-card-content">
+
+          <span>
+            CAMPAIGN
+          </span>
+
+          <h3>
+            Creative
+            <br />
+            Direction
+          </h3>
+
+        </div>
+
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+      </div>
+
+
+      <div class="work-card">
+
+        <div class="work-number">
+          03
+        </div>
+
+        <div class="work-card-content">
+
+          <span>
+            PRODUCTION
+          </span>
+
+          <h3>
+            Visual
+            <br />
+            Stories
+          </h3>
+
+        </div>
+
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       CAPABILITIES
+  ======================================================== -->
+
+  <section
+    id="capabilities"
+    class="content-section capabilities-section"
+  >
+
+    <div class="section-top">
+
+      <span>
+        (02)
+      </span>
+
+      <span class="section-line"></span>
+
+      <span>
+        CAPABILITIES
+      </span>
+
+    </div>
+
+
+    <h2 class="capabilities-title">
+
+      STRATEGY
+      <span>×</span>
+
+      IDENTITY
+      <span>×</span>
+
+      PRODUCTION
+
+    </h2>
+
+
+    <div class="capabilities-list">
+
+      <div class="capability-item">
+
+        <span>
+          01
+        </span>
+
+        <h3>
+          BRAND STRATEGY
+        </h3>
+
+        <i class="fa-solid fa-arrow-right"></i>
+
+      </div>
+
+
+      <div class="capability-item">
+
+        <span>
+          02
+        </span>
+
+        <h3>
+          VISUAL IDENTITY
+        </h3>
+
+        <i class="fa-solid fa-arrow-right"></i>
+
+      </div>
+
+
+      <div class="capability-item">
+
+        <span>
+          03
+        </span>
+
+        <h3>
+          CREATIVE DIRECTION
+        </h3>
+
+        <i class="fa-solid fa-arrow-right"></i>
+
+      </div>
+
+
+      <div class="capability-item">
+
+        <span>
+          04
+        </span>
+
+        <h3>
+          FILM & PRODUCTION
+        </h3>
+
+        <i class="fa-solid fa-arrow-right"></i>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       ABOUT
+  ======================================================== -->
+
+  <section
+    id="about"
+    class="content-section about-section"
+  >
+
+    <div class="section-top">
+
+      <span>
+        (03)
+      </span>
+
+      <span class="section-line"></span>
+
+      <span>
+        ABOUT EAST HOOD
+      </span>
+
+    </div>
+
+
+    <div class="about-grid">
+
+      <div>
+
+        <h2>
+          YOUR BRAND
+          <br />
+
+          DESERVES
+          <br />
+
+          <em>
+            A POINT OF VIEW.
+          </em>
+        </h2>
+
+      </div>
+
+
+      <div class="about-description">
+
+        <p>
+          EAST HOOD is a branding, strategy and
+          production house built for brands that
+          refuse to disappear into the noise.
+        </p>
+
+        <p>
+          We turn ideas into identities,
+          identities into experiences,
+          and experiences into brands people remember.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+
+<!-- =======================================================
+     CONTACT SECTION
+======================================================== -->
+<section
+  id="contact"
+  class="relative min-h-screen w-full overflow-hidden bg-black text-[#f4f0ea]"
+>
+
+  <!-- =====================================================
+       BACKGROUND
+  ====================================================== -->
+  <img
+    src="/oldphonebg.png"
+    alt=""
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+  />
+
+  <!-- Dark atmospheric overlay -->
+  <div
+    class="pointer-events-none absolute inset-0 bg-black/20"
+    aria-hidden="true"
+  ></div>
+
+
+  <!-- =====================================================
+       MAIN CONTACT AREA
+  ====================================================== -->
+  <div
+    class="relative z-10 flex min-h-[calc(100vh-105px)] w-full flex-col lg:flex-row"
+  >
+
+    <!-- ===================================================
+         LEFT — CONTACT CONTENT
+    ==================================================== -->
+    <div
+      class="relative z-20 flex w-full flex-col justify-center
+             px-6 py-20
+             sm:px-10
+             md:px-16
+             lg:w-[55%]
+             lg:px-[8.5vw]
+             lg:py-0"
+    >
+
+      <!-- SECTION LABEL -->
+      <div
+        class="mb-8 flex items-center gap-4
+               text-[9px] tracking-[0.3em] text-white/65
+               sm:mb-10 sm:text-[10px]"
+      >
+
+        <span>(04)</span>
+
+        <span
+          class="h-px w-10 bg-[#e85b17] sm:w-16"
+        ></span>
+
+        <span>CONTACT</span>
+
+      </div>
+
+
+      <!-- =================================================
+           TITLE
+      ================================================== -->
+      <h2
+        class="max-w-[700px]
+               font-serif font-normal
+               text-[clamp(3.5rem,6.5vw,7rem)]
+               leading-[0.84]
+               tracking-[-0.055em]"
+      >
+
+        YOUR BRAND
+
+        <br />
+
+        CALLED.
+
+        <br />
+
+        <em class="not-italic text-[#e85b17]">
+          LET'S TALK.
+        </em>
+
+      </h2>
+
+
+      <!-- =================================================
+           CONTACT DETAILS
+      ================================================== -->
+      <div
+        class="mt-10 flex flex-col gap-8
+               sm:mt-12
+               sm:flex-row
+               sm:items-end
+               sm:gap-14
+               lg:mt-14
+               lg:gap-16"
+      >
+
+        <!-- START PROJECT -->
+        <a
+          href="mailto:hello&#64;easthood.house"
+          class="group flex w-fit flex-col"
+        >
+
+          <div
+            class="flex items-center gap-5
+                   text-[9px]
+                   tracking-[0.22em]
+                   sm:text-[10px]"
+          >
+
+            <span>
+              START A PROJECT
+            </span>
+
+            <i
+              class="fa-solid fa-arrow-right
+                     text-[#e85b17]
+                     transition-transform
+                     duration-300
+                     group-hover:translate-x-2"
+            ></i>
+
+          </div>
+
+
+          <!-- ORANGE LINE -->
+          <span
+            class="mt-4 block h-px w-36
+                   bg-[#e85b17]
+                   transition-all
+                   duration-500
+                   group-hover:w-48"
+          ></span>
+
+        </a>
+
+
+        <!-- EMAIL / PHONE -->
+        <div
+          class="flex flex-col gap-3
+                 text-[9px]
+                 tracking-[0.16em]
+                 text-white/70
+                 sm:text-[10px]"
+        >
+
+          <a
+            href="mailto:hello&#64;easthood.house"
+            class="transition-colors duration-300
+                   hover:text-[#e85b17]"
+          >
+            HELLO&#64;EASTHOOD.HOUSE
+          </a>
+
+          <a
+            href="tel:+201001234567"
+            class="transition-colors duration-300
+                   hover:text-[#e85b17]"
+          >
+            +20 100 123 4567
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         RIGHT — PHONE
+    ==================================================== -->
+    <div
+      class="relative flex w-full flex-1
+             items-end justify-center
+             overflow-hidden
+             lg:w-[45%]"
+    >
+
+      <!-- Subtle light around phone -->
+      <div
+        class="pointer-events-none absolute
+               bottom-0 left-1/2
+               h-[65%] w-[80%]
+               -translate-x-1/2
+               rounded-full
+               bg-[radial-gradient(ellipse,rgba(255,255,255,0.055)_0%,transparent_68%)]"
+      ></div>
+
+
+      <!-- =================================================
+           PHONE
+           
+           Smaller than before.
+           Anchored to bottom.
+           Does NOT float in the middle.
+      ================================================== -->
+      <img
+        src="/old phone.png"
+        alt="Vintage telephone"
+        class="relative z-10
+               block
+               w-[65%]
+               max-w-[360px]
+               object-contain
+               object-bottom
+               opacity-95
+               transition-transform
+               duration-700
+               ease-out
+               hover:scale-[1.015]
+               sm:w-[55%]
+               md:w-[48%]
+               lg:absolute
+               lg:bottom-0
+               lg:right-[2%]
+               lg:w-[72%]
+               lg:max-w-[520px]"
+      />
+
+    </div>
+
+  </div>
+
+
+</section>
